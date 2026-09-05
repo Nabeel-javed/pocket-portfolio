@@ -1,4 +1,4 @@
-// Original, locally synthesized sounds. No audio is created before opt-in.
+// Original, locally synthesized sounds. Audio is created on interaction only.
 const keypad = ["123", "456", "789", "*0#"];
 const rows = [697, 770, 852, 941];
 const columns = [1209, 1336, 1477];

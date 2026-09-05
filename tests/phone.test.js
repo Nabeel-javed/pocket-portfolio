@@ -236,12 +236,28 @@ test("sound settings update the engine and native controls keep keyboard input",
     setStyle: (value) => events.push(["style", value]),
   };
   const { window, doc, click, key } = setup({ audio });
+  assert.deepEqual(
+    events,
+    [["enabled", true]],
+    "enabled without playback on load",
+  );
+  assert.equal(doc.querySelector("#sound-indicator").textContent, "♪");
+  assert.equal(
+    doc.querySelector("#sound-toggle").getAttribute("aria-pressed"),
+    "true",
+  );
   click('[data-key="9"]');
   assert.equal(
     doc.querySelector("[data-toggle-sound]").getAttribute("aria-pressed"),
-    "false",
+    "true",
   );
   click("[data-toggle-sound]");
+  assert.deepEqual(events.at(-1), ["enabled", false]);
+  assert.equal(
+    doc.querySelector("#sound-toggle").getAttribute("aria-pressed"),
+    "false",
+  );
+  click('[data-key="#"]');
   assert.equal(
     doc.querySelector("#sound-toggle").getAttribute("aria-pressed"),
     "true",
