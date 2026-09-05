@@ -37,7 +37,13 @@ The generated `dist/` directory is suitable for static hosting at a domain root.
 - A 1.8-second signature startup appears on the first visit. Skip it with the on-screen button or use the phone controls immediately. Settings → Replay startup brings it back with a short melody. Reduced-motion preferences bypass the animation.
 - Snake shows SCORE and BEST, saves a new personal best during play, and retains it between rounds and visits on the same browser. Clearing site data clears the record and wallpaper choice.
 - A homepage clue leads to a hidden Aurora finish. Discovery works with the physical keypad or keyboard outside Snake, unlocks a short celebration, and saves access locally. Aurora then appears in the finish picker and star-key cycle.
-- Projects opens a photo-style gallery of five projects. Select a tile, browse with left/right, and press OK or tap the image for a larger view. The larger gallery supports arrow keys, previous/next buttons, and Escape; closing it restores phone focus and selection.
+- Projects opens a photo-style gallery of five selected projects and six planned projects. Select a tile, browse with left/right, and press OK or tap the image for a larger view. The larger gallery supports arrow keys, previous/next buttons, and Escape; closing it restores phone focus and selection.
+
+## Planned projects
+
+The gallery includes six **planned, not yet built** applications: Project Memory (Graphiti), Voice Interview (LiveKit Agents), Evidence Notebook (Open Notebook), Research Analyst (DeerFlow), Document Workflows (Hatchet), and Workflow Studio (Sim).
+
+Their cards and both detail views identify their status, proposed features, and upstream repositories. These are project plans, not completed contributions or live applications. Sim's enterprise directory has separate licensing restrictions; the proposal refers to extending its Apache-2.0 core.
 
 ## Project images
 

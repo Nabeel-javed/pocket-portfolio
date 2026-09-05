@@ -2722,3 +2722,56 @@ dialog ul {
     scroll-behavior: auto !important;
   }
 }
+
+.project-status {
+  display: inline-block;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 3px 5px;
+  font: 6px/1.4 var(--mono);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #d8c5a4;
+}
+.project-thumbnail .project-status {
+  display: table;
+  margin-top: 5px;
+  padding: 2px 4px;
+  font-size: 5px;
+}
+.project-plan {
+  margin: 10px 0;
+}
+.project-plan p {
+  margin: 6px 0;
+}
+.project-source {
+  margin: 12px 0;
+  padding: 10px 0;
+  border-top: 1px solid #819aaa4f;
+  font: 6px/1.8 var(--mono);
+  overflow-wrap: anywhere;
+}
+.project-source a {
+  color: var(--screen-highlight);
+  text-underline-offset: 3px;
+}
+.project-source p {
+  margin: 8px 0 0;
+  font: inherit;
+}
+#project-viewer-details .project-status {
+  font-size: 10px;
+  color: var(--accent);
+}
+#project-viewer-details .project-plan p {
+  font-size: 12px;
+  color: var(--muted);
+}
+#project-viewer-details .project-source {
+  font-size: 11px;
+  border-color: var(--rule);
+}
+#project-viewer-details .project-source a {
+  color: var(--accent);
+}

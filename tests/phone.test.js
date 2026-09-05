@@ -134,13 +134,13 @@ test("project details return to the project list, then to the home screen", () =
     /Knowledge, within reach/,
   );
   click("#physical-back");
-  assert.equal(doc.querySelectorAll("[data-project]").length, 5);
+  assert.equal(doc.querySelectorAll("[data-project]").length, projects.length);
   click("#physical-back");
   assert.equal(doc.querySelectorAll(".app-icon").length, 9);
 });
-test("all five project summaries have content and an actionable contact route", () => {
+test("all project summaries have content and an actionable contact route", () => {
   const { doc, click } = setup();
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < projects.length; i++) {
     click('[data-key="2"]');
     click(`[data-project="${i}"]`);
     assert.equal(doc.querySelectorAll(".project-mini li").length, 3);
@@ -551,7 +551,7 @@ test("the hidden theme also works when local storage is disabled", () => {
   assert.equal(doc.querySelectorAll(".settings-themes button").length, 4);
 });
 
-test("project gallery displays five illustrated albums and preserves the selected album on Back", () => {
+test("project gallery displays illustrated albums and preserves the selected album on Back", () => {
   const { doc, click, key } = setup();
   click('[data-key="2"]');
   const cards = doc.querySelectorAll(".project-thumbnail");
@@ -581,7 +581,7 @@ test("phone gallery buttons and directional keys browse projects with wraparound
   click('#screen-content [data-project-step="-1"]');
   assert.match(
     doc.querySelector(".project-mini").textContent,
-    /ML PRICING ENGINE/,
+    /WORKFLOW STUDIO/,
   );
   key("ArrowRight");
   assert.match(
@@ -615,10 +615,13 @@ test("larger gallery keeps captions, project details, and phone selection synchr
     "Concept illustration",
   );
   key("ArrowLeft");
-  assert.equal(doc.querySelector("#project-position").textContent, "5 / 5");
+  assert.equal(
+    doc.querySelector("#project-position").textContent,
+    `${projects.length} / ${projects.length}`,
+  );
   assert.equal(
     doc.querySelector("#project-viewer-title").textContent,
-    projects[4].subtitle,
+    projects.at(-1).subtitle,
   );
   assert.equal(doc.querySelectorAll("#project-viewer-details li").length, 3);
   assert.equal(
@@ -628,7 +631,7 @@ test("larger gallery keeps captions, project details, and phone selection synchr
   key("2");
   assert.equal(
     doc.querySelector("#project-viewer-title").textContent,
-    projects[4].subtitle,
+    projects.at(-1).subtitle,
   );
   key("Escape");
   assert.equal(doc.querySelector("#project-dialog").open, false);
@@ -636,13 +639,13 @@ test("larger gallery keeps captions, project details, and phone selection synchr
   assert.equal(doc.activeElement, doc.querySelector(".project-photo"));
   assert.match(
     doc.querySelector(".project-mini").textContent,
-    /ML PRICING ENGINE/,
+    /WORKFLOW STUDIO/,
   );
   click("#physical-back");
   assert.equal(
     doc.querySelector('.project-thumbnail[aria-current="true"]').dataset
       .project,
-    "4",
+    String(projects.length - 1),
   );
 });
 
@@ -656,4 +659,46 @@ test("physical OK opens the larger viewer and closing restores the hardware focu
   assert.equal(doc.querySelector("#project-dialog").open, true);
   click("#close-project");
   assert.equal(doc.activeElement, select);
+});
+
+test("planned projects retain attribution and concept status in both gallery views", () => {
+  const { doc, click } = setup();
+  click('[data-key="2"]');
+  assert.equal(
+    doc.querySelectorAll(".project-thumbnail .project-status").length,
+    6,
+  );
+  for (const [index, project] of projects.entries()) {
+    if (project.status !== "planned") continue;
+    click(`[data-project="${index}"]`);
+    assert.match(
+      doc.querySelector(".project-plan").textContent,
+      /Not built yet/,
+    );
+    assert.equal(
+      doc.querySelector(".project-source a").href,
+      project.upstreamUrl,
+    );
+    assert.match(
+      doc.querySelector(".project-photo-controls").textContent,
+      /Planned/,
+    );
+    click(".project-photo");
+    const viewer = doc.querySelector("#project-viewer-details");
+    assert.match(
+      viewer.querySelector(".project-plan").textContent,
+      /Not built yet/,
+    );
+    assert.equal(
+      viewer.querySelector(".project-source a").href,
+      project.upstreamUrl,
+    );
+    assert.equal(
+      viewer.querySelector(".project-source a").rel,
+      "noopener noreferrer",
+    );
+    assert.ok(viewer.textContent.includes(project.license));
+    click("#close-project");
+    click("#physical-back");
+  }
 });

@@ -314,8 +314,8 @@ function openApp(id) {
     );
   } else if (id === "work") {
     setContent(
-      appHeader(id, "Selected projects", "GALLERY / 05") +
-        `<div class="project-gallery" role="group" aria-label="Project albums">${projects.map((project, i) => `<button class="project-thumbnail ${i === selectedProject ? "selected" : ""}" data-project="${i}" aria-label="View ${project.title}" ${i === selectedProject ? 'aria-current="true"' : ""}><img src="${project.image}" alt="" width="720" height="440" loading="lazy"/><span class="project-thumbnail-title"><small>0${i + 1}</small>${project.title}</span></button>`).join("")}<div class="gallery-note"><span>05</span>PROJECTS<br>WORTH A CLOSER LOOK.</div></div>`,
+      appHeader(id, "Selected projects", `GALLERY / ${projects.length}`) +
+        `<div class="project-gallery" role="group" aria-label="Project albums">${projects.map((project, i) => `<button class="project-thumbnail ${i === selectedProject ? "selected" : ""}" data-project="${i}" aria-label="View ${project.title}" ${i === selectedProject ? 'aria-current="true"' : ""}><img src="${project.image}" alt="" width="720" height="440" loading="lazy"/><span class="project-thumbnail-title"><small>${String(i + 1).padStart(2, "0")}</small>${project.title}${project.status === "planned" ? '<span class="project-status">Planned</span>' : ""}</span></button>`).join("")}<div class="gallery-note"><span>${projects.length}</span>${projects.filter((project) => project.status !== "planned").length} SELECTED<br>${projects.filter((project) => project.status === "planned").length} PLANNED</div></div>`,
     );
     updateSoftkeys("Menu", "View", "Back");
     screen
@@ -410,14 +410,28 @@ function renderSettings() {
         )}</div><button class="screen-action" data-open-wallpapers>Wallpaper <span>${wallpapers.find((item) => item.id === wallpaper).name} ›</span></button><div class="settings-row"><span>Phone sounds</span><button data-toggle-sound aria-pressed="${sound}">${sound ? "On ♪" : "Off"}</button></div><div class="settings-row"><label for="sound-style">Sound style</label><select id="sound-style"><option value="classic" ${soundStyle === "classic" ? "selected" : ""}>Classic</option><option value="soft" ${soundStyle === "soft" ? "selected" : ""}>Soft</option></select></div><div class="settings-row sound-volume-row"><label for="sound-volume">Volume <output id="sound-level" for="sound-volume">${soundVolume}%</output></label><input id="sound-volume" type="range" min="0" max="100" step="5" value="${soundVolume}" aria-valuetext="${soundVolume}%"></div><button class="screen-action" data-preview-sound>Preview ringtone <span>♪</span></button><button class="screen-action" data-replay-startup>Replay startup <span>↻</span></button><div class="settings-row"><span>Phone</span><button data-fold>Close ↘</button></div><p class="settings-hint">✳ changes color · # toggles sound<br>0 takes you home · Esc goes back</p></div>`,
   );
 }
+function projectContext(project) {
+  return project.status === "planned"
+    ? '<div class="project-plan"><span class="project-status">Planned project</span><p>Concept stage · Not built yet.</p><p>Proposed features:</p></div>'
+    : "";
+}
+function projectSource(project) {
+  return project.upstreamUrl
+    ? `<div class="project-source"><a href="${project.upstreamUrl}" target="_blank" rel="noopener noreferrer">Explore ${project.upstream} on GitHub <span aria-hidden="true">↗</span></a><p>Upstream: ${project.upstream} · ${project.license}</p></div>`
+    : "";
+}
 function openProject(index) {
   if (!projects[index]) return;
   selectedProject = index;
   route = "project";
   const project = projects[index];
   setContent(
-    appHeader("work", "Project gallery", `0${index + 1} / 05`) +
-      `<div class="project-photo-wrap"><button class="project-photo" data-expand-project aria-label="Enlarge ${project.title}"><img src="${project.image}" alt="${project.imageAlt}" width="720" height="440"/><span aria-hidden="true">↗</span></button><div class="project-photo-controls"><button data-project-step="-1" aria-label="Previous project">←</button><span>${project.imageLabel}</span><button data-project-step="1" aria-label="Next project">→</button></div></div><div class="app-body project-mini"><span class="project-index">${project.title.toUpperCase()}</span><h3>${project.subtitle}</h3><p>${project.description}</p><ul>${project.points.map((point) => `<li>${point}</li>`).join("")}</ul><p class="project-stack">${project.stack}</p><button class="screen-action" data-expand-project>Open larger view <span>↗</span></button><button class="screen-action" data-app="contact">Talk about this project <span>↗</span></button></div>`,
+    appHeader(
+      "work",
+      "Project gallery",
+      `${String(index + 1).padStart(2, "0")} / ${projects.length}`,
+    ) +
+      `<div class="project-photo-wrap"><button class="project-photo" data-expand-project aria-label="Enlarge ${project.title}"><img src="${project.image}" alt="${project.imageAlt}" width="720" height="440"/><span aria-hidden="true">↗</span></button><div class="project-photo-controls"><button data-project-step="-1" aria-label="Previous project">←</button><span>${project.imageLabel}</span><button data-project-step="1" aria-label="Next project">→</button></div></div><div class="app-body project-mini"><span class="project-index">${project.title.toUpperCase()}</span><h3>${project.subtitle}</h3>${projectContext(project)}<p>${project.description}</p><ul>${project.points.map((point) => `<li>${point}</li>`).join("")}</ul><p class="project-stack">${project.stack}</p>${projectSource(project)}<button class="screen-action" data-expand-project>Open larger view <span>↗</span></button><button class="screen-action" data-app="contact">Talk about this project <span>↗</span></button></div>`,
   );
   updateSoftkeys("Menu", "Enlarge", "Back");
   announce(
@@ -434,7 +448,7 @@ function renderProjectViewer() {
   projectDialog.querySelector("#project-position").textContent =
     `${selectedProject + 1} / ${projects.length}`;
   projectDialog.querySelector("#project-viewer-details").innerHTML =
-    `<p class="tiny-label">${project.title.toUpperCase()}</p><h2 id="project-viewer-title">${project.subtitle}</h2><p class="project-viewer-description">${project.description}</p><ul>${project.points.map((point) => `<li>${point}</li>`).join("")}</ul><p class="project-viewer-stack">${project.stack}</p><a class="project-viewer-contact" href="mailto:nabeeljaved944@gmail.com">Talk about this project <span aria-hidden="true">↗</span></a>`;
+    `<p class="tiny-label">${project.title.toUpperCase()}</p><h2 id="project-viewer-title">${project.subtitle}</h2>${projectContext(project)}<p class="project-viewer-description">${project.description}</p><ul>${project.points.map((point) => `<li>${point}</li>`).join("")}</ul><p class="project-viewer-stack">${project.stack}</p>${projectSource(project)}<a class="project-viewer-contact" href="mailto:nabeeljaved944@gmail.com">Talk about this project <span aria-hidden="true">↗</span></a>`;
 }
 function showProjectViewer() {
   if (route !== "project" || quickDialog.open || projectDialog.open) return;
