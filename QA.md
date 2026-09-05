@@ -32,7 +32,7 @@ The DOM harness mocks browser drawing and modal methods, and the audio tests use
 
 The public CV was previously visually reviewed after redaction. This revision preserves that file. Its original source is stored outside the project.
 
-No public deployment was performed.
+Production deployed to Vercel on 2026-09-05: https://pocket-portfolio-sigma.vercel.app.
 
 ## Gallery content
 
@@ -40,4 +40,4 @@ The five project visuals are original concept illustrations based on the existin
 
 ## Open-source project additions
 
-Six existing open-source projects are featured as community spotlights alongside the five existing portfolio projects. DOM checks cover open-source labels, creator attribution and links, license notes in the larger viewer, and wraparound across all eleven entries. All eleven SVG files parse successfully and match their production build copies. The production build and all 45 tests pass. Browser visual review remains pending. No public deployment was performed for this addition.
+Six existing open-source projects are featured as community spotlights alongside the five existing portfolio projects. DOM checks cover open-source labels, creator attribution and links, license notes in the larger viewer, and wraparound across all eleven entries. All eleven SVG files parse successfully and match their production build copies. The production build and all 45 tests pass. Browser visual review remains pending. These additions are included in the Vercel production deployment.

@@ -19,7 +19,7 @@ npm run preview
 npm test
 ```
 
-The generated `dist/` directory is suitable for static hosting at a domain root. Local servers bind to `127.0.0.1`. No public deployment has been performed.
+The generated `dist/` directory is suitable for static hosting at a domain root. Local servers bind to `127.0.0.1`. Production: https://pocket-portfolio-sigma.vercel.app. Vercel is connected to `Nabeel-javed/pocket-portfolio`; pushes to `main` deploy automatically.
 
 ## Phone controls
 
@@ -70,3 +70,7 @@ Project text and image metadata live in `src/projects.js`. To add a supplied scr
 Fonts are self-hosted; their SIL Open Font Licenses are in `public/licenses/`. There is no analytics or remote font service. Contact buttons use mailto links rather than a server-side form.
 
 The original supplied CV is preserved outside this project. The previous exploded-object implementation is backed up at `../nabeel-portfolio-history/exploded-object-2026-09-05.tar.gz`.
+
+## Custom domain
+
+To connect `nabeeljaved.xyz`, open the Vercel project’s Settings → Domains, add the domain, and apply the DNS records Vercel displays at your registrar. Domain DNS has not been configured as part of the initial deployment.
