@@ -36,12 +36,14 @@ The generated `dist/` directory is suitable for static hosting at a domain root.
 - Settings → Wallpaper offers Original, Munich, Alpine, and Midnight scenes. Tap to apply, or preview with the D-pad and press OK. The choice saves locally and is independent of the phone finish.
 - A 1.8-second signature startup appears on the first visit. Skip it with the on-screen button or use the phone controls immediately. Settings → Replay startup brings it back with a short melody. Reduced-motion preferences bypass the animation.
 - Snake shows SCORE and BEST, saves a new personal best during play, and retains it between rounds and visits on the same browser. Clearing site data clears the record and wallpaper choice.
+- A homepage clue leads to a hidden Aurora finish. Discovery works with the physical keypad or keyboard outside Snake, unlocks a short celebration, and saves access locally. Aurora then appears in the finish picker and star-key cycle.
 
 ## Files
 
 - `index.html`: phone hardware, surrounding layout, contact links, and Quick view content.
 - `src/audio.js`: original Web Audio synthesis, volume, sound styles, and playback cleanup. No downloaded audio assets.
 - `src/personalization.js`: wallpaper choices and resilient local preference / high-score storage.
+- `src/easter-egg.js`: bounded secret-code recognition with interruption and inactivity resets.
 - `public/wallpapers/`: original SVG pixel scenes, with no external image requests.
 - `src/style.css`: the three color finishes, responsive layout, hardware illustration, folding, and app styles.
 - `src/main.js`: portfolio content, navigation, app screens, keyboard controls, audio feedback, themes, clock, and dialog behavior.

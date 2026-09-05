@@ -22,7 +22,10 @@
     <script>
       try {
         const t = localStorage.getItem("nj-phone-theme");
-        if (["porcelain", "graphite", "amber"].includes(t))
+        if (
+          ["porcelain", "graphite", "amber"].includes(t) ||
+          (t === "aurora" && localStorage.getItem("nj-phone-secret") === "1")
+        )
           document.documentElement.dataset.theme = t;
       } catch {}
     </script>
@@ -55,6 +58,15 @@
             title="Champagne / Amber"
             aria-label="Amber theme"
             aria-pressed="false"
+          >
+            <i></i>
+          </button>
+          <button
+            data-theme-option="aurora"
+            title="Aurora / Hidden edition"
+            aria-label="Aurora theme"
+            aria-pressed="false"
+            hidden
           >
             <i></i>
           </button>
@@ -258,6 +270,18 @@
             Sound on <span aria-hidden="true">♪</span>
           </button>
         </div>
+        <details class="easter-clue" id="easter-clue">
+          <summary>
+            <span aria-hidden="true">✳</span>
+            <span id="easter-teaser"
+              >There’s an Easter egg here. Can you find it?</span
+            >
+          </summary>
+          <p id="easter-hint">
+            My first name. One number per letter.<br />The keypad knows the
+            rest.
+          </p>
+        </details>
       </section>
       <aside class="field-notes" aria-label="How to explore">
         <div class="note-top">

@@ -5,7 +5,7 @@
 ## Passed
 
 - Production build (`npm run build`).
-- 33 regression checks (`npm test`): twenty phone interaction and personalization checks, six audio lifecycle checks, and seven Snake rule checks.
+- 40 regression checks (`npm test`): twenty-five phone interaction and personalization checks, two secret-code checks, six audio lifecycle checks, and seven Snake rule checks.
 - All nine apps can be opened and returned from.
 - Keyboard selection works after a physical keypad button had focus.
 - All five project details open and lead to Contact; Back restores the project list.
@@ -18,6 +18,7 @@
 - Four wallpaper choices persist across page instances, remain independent of the phone finish, and support D-pad preview / OK selection.
 - Startup first-visit detection, skip/replay, automatic completion, reduced-motion bypass, and cancellation when navigating, folding, or opening Quick view.
 - Snake best-score persistence tested through real game ticks, leaving mid-round, reopening, and a new page instance. Lower scores do not overwrite records; invalid saved values and blocked storage remain usable.
+- Easter egg: keyboard and physical keypad discovery, clue without a visible code, hidden/available theme controls, saved unlock and theme restoration, four-finish star cycling, wrong/interrupted/expired codes, Snake exclusion, and operation with blocked storage.
 - Audio opt-in, twelve distinct paired keypad tones, finite ringtone scheduling, cancellation on mute/new interaction/backgrounding, silent zero volume, quieter Soft style, node cleanup, and unavailable/blocked Web Audio handling.
 - Quick view state, page scroll restoration, and focus restoration in the DOM harness.
 - Snake: stationary paused/ready states, turn reversal prevention, eating/growth, food placement, wall/body collision, moving into a vacating tail, and a full-board win.

@@ -2,6 +2,7 @@ import "./style.css";
 import { createSnake } from "./snake.js";
 import { createPhoneAudio } from "./audio.js";
 import { createPersonalization, wallpapers } from "./personalization.js";
+import { createSecretCode } from "./easter-egg.js";
 
 const svg = (body) =>
   `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
@@ -130,6 +131,46 @@ let wallpaper = readPreference("nj-phone-wallpaper", "original");
 if (!wallpapers.some((item) => item.id === wallpaper)) wallpaper = "original";
 let wallpaperIndex = wallpapers.findIndex((item) => item.id === wallpaper);
 let highScore = readHighScore();
+const secretCode = createSecretCode();
+let secretUnlocked = readPreference("nj-phone-secret") === "1";
+const themeNames = {
+  porcelain: "Silver",
+  graphite: "Graphite",
+  amber: "Champagne",
+  aurora: "Aurora",
+};
+function themeOptions() {
+  return secretUnlocked
+    ? ["porcelain", "graphite", "amber", "aurora"]
+    : ["porcelain", "graphite", "amber"];
+}
+function refreshSecret() {
+  document.querySelector('.theme-picker [data-theme-option="aurora"]').hidden =
+    !secretUnlocked;
+  if (secretUnlocked) {
+    document.querySelector("#easter-teaser").textContent =
+      "You found it. Aurora edition unlocked.";
+    document.querySelector("#easter-hint").textContent =
+      "Your secret finish is waiting in Settings.";
+  }
+}
+function unlockSecret() {
+  secretUnlocked = true;
+  savePreference("nj-phone-secret", "1");
+  refreshSecret();
+  setTheme("aurora");
+  leaveGame();
+  route = "secret";
+  setContent(
+    appHeader("settings", "Hidden edition", "UNLOCKED") +
+      `<div class="secret-page"><div class="secret-emblem" aria-hidden="true">✳</div><p class="secret-label">AURORA / SECRET FINISH</p><h3>Curiosity looks<br>good on you.</h3><p>You found the hidden edition.<br>It’s yours to keep.</p><button class="screen-action" data-secret-home>Keep exploring <span>↗</span></button></div>`,
+  );
+  updateSoftkeys("Menu", "Explore", "Back");
+  tone("unlock");
+  announce(
+    "Easter egg found. Aurora edition unlocked. Choose it anytime in Settings.",
+  );
+}
 
 function announce(text) {
   document.querySelector("#announcement").textContent = text;
@@ -151,7 +192,7 @@ function currentTheme() {
   return document.documentElement.dataset.theme;
 }
 function setTheme(theme) {
-  if (!["porcelain", "graphite", "amber"].includes(theme)) return;
+  if (!themeOptions().includes(theme)) return;
   document.documentElement.dataset.theme = theme;
   try {
     localStorage.setItem("nj-phone-theme", theme);
@@ -168,16 +209,18 @@ function setTheme(theme) {
     porcelain: "#efeee8",
     graphite: "#202624",
     amber: "#e9e2d6",
+    aurora: "#211f36",
   }[theme];
 }
 function cycleTheme() {
-  const themes = ["porcelain", "graphite", "amber"];
-  setTheme(themes[(themes.indexOf(currentTheme()) + 1) % 3]);
+  const themes = themeOptions();
+  setTheme(themes[(themes.indexOf(currentTheme()) + 1) % themes.length]);
   toast(
     {
       porcelain: "Silver edition",
       graphite: "Graphite edition",
       amber: "Champagne edition",
+      aurora: "Aurora edition",
     }[currentTheme()],
   );
 }
@@ -412,7 +455,14 @@ function openApp(id) {
 function renderSettings() {
   setContent(
     appHeader("settings", "Make it yours") +
-      `<div class="app-body"><p>Pick your pocket edition.</p><div class="settings-themes" role="group" aria-label="Phone color">${["porcelain", "graphite", "amber"].map((theme, i) => `<button data-theme-option="${theme}" aria-label="${theme} phone color" aria-pressed="${currentTheme() === theme}"><i></i>${["Silver", "Graphite", "Champagne"][i]}</button>`).join("")}</div><button class="screen-action" data-open-wallpapers>Wallpaper <span>${wallpapers.find((item) => item.id === wallpaper).name} ›</span></button><div class="settings-row"><span>Phone sounds</span><button data-toggle-sound aria-pressed="${sound}">${sound ? "On ♪" : "Off"}</button></div><div class="settings-row"><label for="sound-style">Sound style</label><select id="sound-style"><option value="classic" ${soundStyle === "classic" ? "selected" : ""}>Classic</option><option value="soft" ${soundStyle === "soft" ? "selected" : ""}>Soft</option></select></div><div class="settings-row sound-volume-row"><label for="sound-volume">Volume <output id="sound-level" for="sound-volume">${soundVolume}%</output></label><input id="sound-volume" type="range" min="0" max="100" step="5" value="${soundVolume}" aria-valuetext="${soundVolume}%"></div><button class="screen-action" data-preview-sound>Preview ringtone <span>♪</span></button><button class="screen-action" data-replay-startup>Replay startup <span>↻</span></button><div class="settings-row"><span>Phone</span><button data-fold>Close ↘</button></div><p class="settings-hint">✳ changes color · # toggles sound<br>0 takes you home · Esc goes back</p></div>`,
+      `<div class="app-body"><p>Pick your pocket edition.</p><div class="settings-themes" role="group" aria-label="Phone color">${themeOptions()
+        .map(
+          (theme) =>
+            `<button data-theme-option="${theme}" aria-label="${theme} phone color" aria-pressed="${currentTheme() === theme}"><i></i>${themeNames[theme]}</button>`,
+        )
+        .join(
+          "",
+        )}</div><button class="screen-action" data-open-wallpapers>Wallpaper <span>${wallpapers.find((item) => item.id === wallpaper).name} ›</span></button><div class="settings-row"><span>Phone sounds</span><button data-toggle-sound aria-pressed="${sound}">${sound ? "On ♪" : "Off"}</button></div><div class="settings-row"><label for="sound-style">Sound style</label><select id="sound-style"><option value="classic" ${soundStyle === "classic" ? "selected" : ""}>Classic</option><option value="soft" ${soundStyle === "soft" ? "selected" : ""}>Soft</option></select></div><div class="settings-row sound-volume-row"><label for="sound-volume">Volume <output id="sound-level" for="sound-volume">${soundVolume}%</output></label><input id="sound-volume" type="range" min="0" max="100" step="5" value="${soundVolume}" aria-valuetext="${soundVolume}%"></div><button class="screen-action" data-preview-sound>Preview ringtone <span>♪</span></button><button class="screen-action" data-replay-startup>Replay startup <span>↻</span></button><div class="settings-row"><span>Phone</span><button data-fold>Close ↘</button></div><p class="settings-hint">✳ changes color · # toggles sound<br>0 takes you home · Esc goes back</p></div>`,
   );
 }
 function openProject(index) {
@@ -434,6 +484,7 @@ function back() {
   else showHome();
 }
 function fold(value) {
+  secretCode.reset();
   if (value && route === "startup") showHome();
   closed = value;
   if (closed) game?.pause();
@@ -530,6 +581,11 @@ function numberKey(key) {
   const button = document.querySelector(`[data-key="${key}"]`);
   button?.classList.add("key-pressed");
   setTimeout(() => button?.classList.remove("key-pressed"), 100);
+  if (route === "snake") secretCode.reset();
+  else if (secretCode.feed(key)) {
+    unlockSecret();
+    return;
+  }
   if (key === "0") {
     showHome();
     return;
@@ -562,7 +618,20 @@ function showQuickView() {
   document.querySelector("#close-quick").focus();
 }
 
+document.addEventListener(
+  "click",
+  (event) => {
+    if (!event.target.closest("[data-key]")) secretCode.reset();
+  },
+  true,
+);
 document.addEventListener("click", async (event) => {
+  if (event.target.closest("[data-secret-home]")) {
+    tone("confirm");
+    showHome();
+    phoneScreen.focus({ preventScroll: true });
+    return;
+  }
   if (event.target.closest("[data-skip-startup]")) {
     skipStartup();
     return;
@@ -697,6 +766,7 @@ document.addEventListener("keydown", (event) => {
     event.target.matches("input,textarea,select,[contenteditable]")
   )
     return;
+  if (!/^[1-9]$/.test(event.key)) secretCode.reset();
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
     event.preventDefault();
     move(event.key.replace("Arrow", "").toLowerCase());
@@ -712,6 +782,7 @@ document.addEventListener("keydown", (event) => {
     back();
   } else if (/^[0-9*#]$/.test(event.key)) {
     event.preventDefault();
+    if (event.repeat) return;
     numberKey(event.key);
   } else if (
     event.key === " " &&
@@ -723,6 +794,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 function pauseActivity() {
+  secretCode.reset();
   if (route === "startup") showHome();
   game?.pause();
   phoneAudio.stop();
@@ -746,7 +818,9 @@ document.addEventListener("change", (event) => {
     tone("key", "5");
   } else if (event.target.id === "sound-volume") tone("key", "5");
 });
-setTheme(currentTheme());
+refreshSecret();
+const savedTheme = readPreference("nj-phone-theme", currentTheme());
+setTheme(themeOptions().includes(savedTheme) ? savedTheme : "porcelain");
 document.documentElement.dataset.wallpaper = wallpaper;
 if (readPreference("nj-phone-startup-seen") !== "1") showStartup();
 else showHome();

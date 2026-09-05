@@ -5,6 +5,7 @@ import { JSDOM } from "jsdom";
 import { createSnake } from "../src/snake.js";
 import { createPhoneAudio } from "../src/audio.js";
 import { createPersonalization, wallpapers } from "../src/personalization.js";
+import { createSecretCode } from "../src/easter-egg.js";
 
 const pages = [];
 afterEach(() => {
@@ -42,6 +43,7 @@ function setup({
   window.createPersonalization = () =>
     createPersonalization(() => window.localStorage);
   window.wallpapers = wallpapers;
+  window.createSecretCode = createSecretCode;
   window.HTMLElement.prototype.scrollBy = function ({ top }) {
     this.scrollTop += top;
   };
@@ -469,4 +471,80 @@ test("invalid saved values and disabled storage do not break personalization", (
   assert.equal(doc.documentElement.dataset.wallpaper, "alpine");
   click('[data-key="8"]');
   assert.equal(doc.querySelector("#snake-best").textContent, "BEST 00");
+});
+
+test("homepage invites discovery without displaying the secret code", () => {
+  const { doc, click } = setup();
+  assert.match(doc.querySelector("#easter-teaser").textContent, /Easter egg/);
+  assert.doesNotMatch(doc.querySelector("#easter-clue").textContent, /622335/);
+  assert.equal(
+    doc.querySelector('.theme-picker [data-theme-option="aurora"]').hidden,
+    true,
+  );
+  click('[data-key="9"]');
+  assert.equal(doc.querySelectorAll(".settings-themes button").length, 3);
+});
+
+test("typing the name code unlocks Aurora while individual keys still open apps", () => {
+  const { window, doc, key, click } = setup();
+  key("6");
+  assert.equal(
+    doc.querySelector(".app-header > span").textContent,
+    "Elsewhere",
+  );
+  for (const digit of "22335") key(digit);
+  assert.equal(doc.documentElement.dataset.theme, "aurora");
+  assert.ok(doc.querySelector(".secret-page"));
+  assert.equal(window.localStorage.getItem("nj-phone-secret"), "1");
+  assert.equal(window.localStorage.getItem("nj-phone-theme"), "aurora");
+  assert.equal(
+    doc.querySelector('.theme-picker [data-theme-option="aurora"]').hidden,
+    false,
+  );
+  assert.match(doc.querySelector("#easter-teaser").textContent, /unlocked/);
+  click("[data-secret-home]");
+  assert.ok(doc.querySelector(".app-grid"));
+  click('[data-key="9"]');
+  assert.equal(doc.querySelectorAll(".settings-themes button").length, 4);
+  click('.settings-themes [data-theme-option="porcelain"]');
+  click('.settings-themes [data-theme-option="aurora"]');
+  assert.equal(doc.documentElement.dataset.theme, "aurora");
+  click('[data-key="*"]');
+  assert.equal(doc.documentElement.dataset.theme, "porcelain");
+});
+
+test("physical keypad unlocks the theme and returning visitors retain access", () => {
+  const { doc, click } = setup();
+  for (const digit of "622335") click(`[data-key="${digit}"]`);
+  assert.ok(doc.querySelector(".secret-page"));
+  const next = setup({
+    stored: { "nj-phone-secret": "1", "nj-phone-theme": "aurora" },
+  });
+  assert.equal(next.doc.documentElement.dataset.theme, "aurora");
+  assert.equal(
+    next.doc.querySelector('.theme-picker [data-theme-option="aurora"]').hidden,
+    false,
+  );
+  const locked = setup({ stored: { "nj-phone-theme": "aurora" } });
+  assert.equal(locked.doc.documentElement.dataset.theme, "porcelain");
+});
+
+test("interrupted codes and Snake controls never trigger the hidden edition", () => {
+  const { doc, key, click } = setup();
+  for (const digit of "622") key(digit);
+  click("#physical-menu");
+  for (const digit of "335") key(digit);
+  assert.equal(doc.documentElement.dataset.theme, "porcelain");
+  click('[data-key="8"]');
+  for (const digit of "622335") key(digit);
+  assert.ok(doc.querySelector(".snake-page"));
+  assert.equal(doc.documentElement.dataset.theme, "porcelain");
+});
+
+test("the hidden theme also works when local storage is disabled", () => {
+  const { doc, key, click } = setup({ blockedStorage: true });
+  for (const digit of "622335") key(digit);
+  assert.equal(doc.documentElement.dataset.theme, "aurora");
+  click('[data-key="9"]');
+  assert.equal(doc.querySelectorAll(".settings-themes button").length, 4);
 });
