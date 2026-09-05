@@ -27,7 +27,7 @@
   --screen-deep: #203c54;
   --screen-hill: #70999a;
   --screen-highlight: #ffd88b;
-  --phone-scale: 0.96;
+  --phone-scale: 1.02;
   color-scheme: light;
 }
 :root[data-theme="graphite"] {
@@ -1785,7 +1785,7 @@ dialog ul {
 }
 @media (min-height: 940px) and (min-width: 1000px) {
   :root {
-    --phone-scale: 1.08;
+    --phone-scale: 1.14;
   }
   .desktop {
     padding-block: 44px;
@@ -1806,7 +1806,7 @@ dialog ul {
 }
 @media (max-height: 820px) and (min-width: 761px) {
   :root {
-    --phone-scale: 0.82;
+    --phone-scale: 0.87;
   }
   .site-header {
     height: 78px;
@@ -1849,7 +1849,7 @@ dialog ul {
 }
 @media (max-height: 720px) and (min-width: 761px) {
   :root {
-    --phone-scale: 0.72;
+    --phone-scale: 0.76;
   }
   .site-header {
     height: 68px;
@@ -1959,7 +1959,7 @@ dialog ul {
 }
 @media (max-width: 760px) {
   :root {
-    --phone-scale: 0.94;
+    --phone-scale: 1;
   }
   .site-header {
     height: 80px;
@@ -2085,7 +2085,7 @@ dialog ul {
 }
 @media (max-width: 370px) {
   :root {
-    --phone-scale: 0.85;
+    --phone-scale: 0.89;
   }
   .header-right {
     gap: 8px;
