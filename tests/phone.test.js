@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
 import { createSnake } from "../src/snake.js";
+import { createPhoneAudio } from "../src/audio.js";
 
 const pages = [];
 afterEach(() => {
@@ -12,7 +13,7 @@ afterEach(() => {
   }
   pages.length = 0;
 });
-function setup() {
+function setup({ audio } = {}) {
   const page = new JSDOM(
     readFileSync(new URL("../index.html", import.meta.url), "utf8"),
     {
@@ -44,6 +45,11 @@ function setup() {
       },
     );
   window.createSnake = createSnake;
+  window.createPhoneAudio = () =>
+    audio ??
+    createPhoneAudio({
+      createContext: () => new window.AudioContext(),
+    });
   const script = readFileSync(
     new URL("../src/main.js", import.meta.url),
     "utf8",
@@ -186,4 +192,98 @@ test("keypad star cycles the finish and zero returns home", () => {
   assert.equal(doc.documentElement.dataset.theme, "graphite");
   click('[data-key="0"]');
   assert.equal(doc.querySelectorAll(".app-icon").length, 9);
+});
+
+test("green handset opens the call invitation with approved contact actions; red returns home", () => {
+  const events = [];
+  const audio = {
+    play: (...args) => events.push(args),
+    stop() {},
+    setEnabled() {},
+  };
+  const { doc, click } = setup({ audio });
+  click("#call-key");
+  assert.equal(
+    doc.querySelector(".app-header>span").textContent,
+    "Incoming call",
+  );
+  assert.equal(
+    doc.querySelector(".incoming-call h3").textContent,
+    "Let’s work together.",
+  );
+  assert.equal(
+    doc.querySelector(".call-email").getAttribute("href"),
+    "mailto:nabeeljaved944@gmail.com",
+  );
+  assert.equal(
+    doc.querySelector(".call-linkedin").href,
+    "https://www.linkedin.com/in/nabeel-javed/",
+  );
+  assert.equal(doc.querySelector("#screen-center").textContent, "Email");
+  assert.deepEqual(events.at(-1), ["ring", undefined]);
+  click("#end-key");
+  assert.equal(doc.querySelectorAll(".app-icon").length, 9);
+  assert.deepEqual(events.at(-1), ["back", undefined]);
+});
+
+test("sound settings update the engine and native controls keep keyboard input", () => {
+  const events = [];
+  const audio = {
+    play: (...args) => events.push(["play", ...args]),
+    stop() {},
+    setEnabled: (value) => events.push(["enabled", value]),
+    setVolume: (value) => events.push(["volume", value]),
+    setStyle: (value) => events.push(["style", value]),
+  };
+  const { window, doc, click, key } = setup({ audio });
+  click('[data-key="9"]');
+  assert.equal(
+    doc.querySelector("[data-toggle-sound]").getAttribute("aria-pressed"),
+    "false",
+  );
+  click("[data-toggle-sound]");
+  assert.equal(
+    doc.querySelector("#sound-toggle").getAttribute("aria-pressed"),
+    "true",
+  );
+  assert.ok(events.some(([kind, value]) => kind === "enabled" && value));
+  const style = doc.querySelector("#sound-style");
+  style.value = "soft";
+  style.dispatchEvent(new window.Event("change", { bubbles: true }));
+  assert.ok(
+    events.some(([kind, value]) => kind === "style" && value === "soft"),
+  );
+  const slider = doc.querySelector("#sound-volume");
+  slider.value = "20";
+  slider.dispatchEvent(new window.Event("input", { bubbles: true }));
+  assert.equal(doc.querySelector("#sound-level").textContent, "20%");
+  assert.deepEqual(events.at(-1), ["volume", 0.2]);
+  slider.focus();
+  key("ArrowRight");
+  assert.equal(doc.activeElement, slider);
+  click('[data-key="0"]');
+  click('[data-key="9"]');
+  assert.equal(doc.querySelector("#sound-volume").value, "20");
+  assert.equal(doc.querySelector("#sound-style").value, "soft");
+});
+
+test("keypad and lid dispatch distinct sounds, and backgrounding cancels audio", () => {
+  const events = [];
+  const audio = {
+    play: (...args) => events.push(args),
+    stop: () => events.push(["stop"]),
+    setEnabled() {},
+  };
+  const { window, doc, click } = setup({ audio });
+  click('[data-key="2"]');
+  assert.deepEqual(events.at(-1), ["key", "2"]);
+  click("#fold-phone");
+  assert.deepEqual(events.at(-1), ["close", undefined]);
+  click("#fold-phone");
+  assert.deepEqual(events.at(-1), ["open", undefined]);
+  window.dispatchEvent(new window.Event("blur"));
+  assert.deepEqual(events.at(-1), ["stop"]);
+  Object.defineProperty(doc, "hidden", { value: true, configurable: true });
+  doc.dispatchEvent(new window.Event("visibilitychange"));
+  assert.deepEqual(events.at(-1), ["stop"]);
 });

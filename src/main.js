@@ -1,5 +1,6 @@
 import "./style.css";
 import { createSnake } from "./snake.js";
+import { createPhoneAudio } from "./audio.js";
 
 const svg = (body) =>
   `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
@@ -114,7 +115,9 @@ let selected = 0;
 let selectedProject = 0;
 let closed = false;
 let sound = false;
-let audioContext;
+const phoneAudio = createPhoneAudio();
+let soundStyle = "classic";
+let soundVolume = 35;
 let game;
 let toastTimer;
 let quickReturnFocus;
@@ -122,27 +125,8 @@ let quickReturnFocus;
 function announce(text) {
   document.querySelector("#announcement").textContent = text;
 }
-function tone() {
-  if (!sound) return;
-  try {
-    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
-    if (audioContext.state === "suspended") audioContext.resume();
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    oscillator.type = "sine";
-    oscillator.frequency.value = 760;
-    gain.gain.setValueAtTime(0.028, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(
-      0.001,
-      audioContext.currentTime + 0.055,
-    );
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.06);
-  } catch {
-    /* The phone remains usable if audio is unavailable. */
-  }
+function tone(kind = "navigate", key) {
+  phoneAudio.play(kind, key);
 }
 function toast(text) {
   phoneScreen.querySelector(".toast")?.remove();
@@ -190,14 +174,19 @@ function cycleTheme() {
 }
 function setSound(value) {
   sound = value;
+  phoneAudio.setEnabled(value);
   document.querySelector("#sound-toggle").innerHTML =
     `Sound ${value ? "on" : "off"} <span aria-hidden="true">♪</span>`;
   document
     .querySelector("#sound-toggle")
     .setAttribute("aria-pressed", String(value));
   document.querySelector("#sound-indicator").textContent = value ? "♪" : "♪̸";
-  if (route === "settings") renderSettings();
-  if (value) tone();
+  const settingsToggle = screen.querySelector("[data-toggle-sound]");
+  if (settingsToggle) {
+    settingsToggle.textContent = value ? "On ♪" : "Off";
+    settingsToggle.setAttribute("aria-pressed", String(value));
+  }
+  if (value) tone("confirm");
 }
 function clock() {
   const now = new Date();
@@ -277,9 +266,10 @@ function openApp(id) {
     );
   } else if (id === "contact") {
     setContent(
-      appHeader(id, "Let’s connect") +
-        `<div class="app-body contact-card"><div class="contact-stamp">${icons.contact}</div><h3>Start a conversation.</h3><p>Roles, interesting problems, or a simple hello.</p><a class="contact-email" href="mailto:nabeeljaved944@gmail.com">nabeeljaved944@gmail.com</a><a class="screen-action primary" href="mailto:nabeeljaved944@gmail.com">Write an email <span>↗</span></a><button class="screen-action" data-copy-email>Copy email address <span>⧉</span></button></div>`,
+      appHeader(id, "Incoming call", "SAY HELLO") +
+        `<div class="incoming-call"><div class="caller-orbit" aria-hidden="true"><span></span><span></span><div class="caller-avatar">${icons.about}</div></div><p class="caller-name">Nabeel Javed · Munich</p><h3>Let’s work together.</h3><p class="caller-note">A role, an idea, or a simple hello.</p><div class="call-actions"><a class="screen-action call-email" href="mailto:nabeeljaved944@gmail.com"><span aria-hidden="true">↗</span>Email</a><a class="screen-action call-linkedin" href="https://www.linkedin.com/in/nabeel-javed/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">in</span>LinkedIn</a></div><button class="copy-contact" data-copy-email aria-label="Copy email address">nabeeljaved944@gmail.com <span aria-hidden="true">⧉</span></button></div>`,
     );
+    updateSoftkeys("Menu", "Email", "Back");
   } else if (id === "links") {
     setContent(
       appHeader(id, "Elsewhere", "2 LINKS") +
@@ -320,7 +310,7 @@ function openApp(id) {
 function renderSettings() {
   setContent(
     appHeader("settings", "Make it yours") +
-      `<div class="app-body"><p>Pick your pocket edition.</p><div class="settings-themes" role="group" aria-label="Phone color">${["porcelain", "graphite", "amber"].map((theme, i) => `<button data-theme-option="${theme}" aria-label="${theme} phone color" aria-pressed="${currentTheme() === theme}"><i></i>${["Silver", "Graphite", "Champagne"][i]}</button>`).join("")}</div><div class="settings-row"><span>Keypad sound</span><button data-toggle-sound aria-pressed="${sound}">${sound ? "On ♪" : "Off"}</button></div><div class="settings-row"><span>Phone</span><button data-fold>Close ↘</button></div><p class="settings-hint">✳ changes color · # toggles sound<br>0 takes you home · Esc goes back</p></div>`,
+      `<div class="app-body"><p>Pick your pocket edition.</p><div class="settings-themes" role="group" aria-label="Phone color">${["porcelain", "graphite", "amber"].map((theme, i) => `<button data-theme-option="${theme}" aria-label="${theme} phone color" aria-pressed="${currentTheme() === theme}"><i></i>${["Silver", "Graphite", "Champagne"][i]}</button>`).join("")}</div><div class="settings-row"><span>Phone sounds</span><button data-toggle-sound aria-pressed="${sound}">${sound ? "On ♪" : "Off"}</button></div><div class="settings-row"><label for="sound-style">Sound style</label><select id="sound-style"><option value="classic" ${soundStyle === "classic" ? "selected" : ""}>Classic</option><option value="soft" ${soundStyle === "soft" ? "selected" : ""}>Soft</option></select></div><div class="settings-row sound-volume-row"><label for="sound-volume">Volume <output id="sound-level" for="sound-volume">${soundVolume}%</output></label><input id="sound-volume" type="range" min="0" max="100" step="5" value="${soundVolume}" aria-valuetext="${soundVolume}%"></div><button class="screen-action" data-preview-sound>Preview ringtone <span>♪</span></button><div class="settings-row"><span>Phone</span><button data-fold>Close ↘</button></div><p class="settings-hint">✳ changes color · # toggles sound<br>0 takes you home · Esc goes back</p></div>`,
   );
 }
 function openProject(index) {
@@ -336,7 +326,7 @@ function openProject(index) {
   announce(`${project.title} details opened.`);
 }
 function back() {
-  tone();
+  tone("back");
   if (route === "project") openApp("work");
   else showHome();
 }
@@ -354,7 +344,7 @@ function fold(value) {
   announce(
     closed ? "Phone closed. Use Open phone to continue." : "Phone open.",
   );
-  tone();
+  tone(closed ? "close" : "open");
 }
 function move(direction) {
   if (closed) return;
@@ -401,7 +391,7 @@ function select() {
     fold(false);
     return;
   }
-  tone();
+  tone("confirm");
   if (route === "home") openApp(apps[selected].id);
   else if (route === "work") openProject(selectedProject);
   else if (route === "snake") game?.toggle();
@@ -412,7 +402,7 @@ function numberKey(key) {
     fold(false);
     return;
   }
-  tone();
+  if (key !== "#") tone("key", key);
   const button = document.querySelector(`[data-key="${key}"]`);
   button?.classList.add("key-pressed");
   setTimeout(() => button?.classList.remove("key-pressed"), 100);
@@ -426,7 +416,7 @@ function numberKey(key) {
   }
   if (key === "#") {
     setSound(!sound);
-    toast(sound ? "Keypad sound on" : "Keypad sound off");
+    toast(sound ? "Phone sounds on" : "Phone sounds off");
     return;
   }
   if (route === "snake") {
@@ -439,6 +429,7 @@ function numberKey(key) {
   if (apps[index]) openApp(apps[index].id);
 }
 function showQuickView() {
+  phoneAudio.stop();
   quickReturnFocus = document.activeElement;
   game?.pause();
   quickDialog.showModal();
@@ -447,6 +438,13 @@ function showQuickView() {
 }
 
 document.addEventListener("click", async (event) => {
+  if (event.target.closest(".incoming-call a, .copy-contact"))
+    phoneAudio.stop();
+  if (event.target.closest("[data-preview-sound]")) {
+    if (!sound) setSound(true);
+    tone("ring");
+    return;
+  }
   const theme = event.target.closest("[data-theme-option]");
   if (theme) {
     tone();
@@ -455,13 +453,13 @@ document.addEventListener("click", async (event) => {
   }
   const app = event.target.closest("[data-app]");
   if (app) {
-    tone();
+    tone("confirm");
     openApp(app.dataset.app);
     return;
   }
   const project = event.target.closest("[data-project]");
   if (project) {
-    tone();
+    tone("confirm");
     openProject(Number(project.dataset.project));
     return;
   }
@@ -492,7 +490,7 @@ document.addEventListener("click", async (event) => {
       await navigator.clipboard.writeText("nabeeljaved944@gmail.com");
       toast("Email copied. Say hello!");
     } catch {
-      toast("Select the email address to copy it.");
+      toast("Couldn’t copy. Use the Email button above.");
     }
   }
   if (event.target.closest("#snake-start")) game?.toggle();
@@ -504,20 +502,22 @@ document.querySelector("#physical-menu").addEventListener("click", () => {
 document.querySelector("#physical-back").addEventListener("click", back);
 document.querySelector("#select-key").addEventListener("click", select);
 document.querySelector("#end-key").addEventListener("click", () => {
-  tone();
+  tone("back");
   showHome();
 });
 document.querySelector("#call-key").addEventListener("click", () => {
-  tone();
   openApp("contact");
+  tone("ring");
 });
 document.querySelector("#screen-left").addEventListener("click", () => {
   tone();
   showHome();
 });
 document.querySelector("#screen-right").addEventListener("click", () => {
-  if (route === "home") openApp("contact");
-  else back();
+  if (route === "home") {
+    openApp("contact");
+    tone("confirm");
+  } else back();
 });
 document
   .querySelector("#fold-phone")
@@ -577,10 +577,29 @@ document.addEventListener("keydown", (event) => {
     game?.toggle();
   }
 });
+function pauseActivity() {
+  game?.pause();
+  phoneAudio.stop();
+}
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) game?.pause();
+  if (document.hidden) pauseActivity();
 });
-window.addEventListener("blur", () => game?.pause());
+window.addEventListener("blur", pauseActivity);
+window.addEventListener("pagehide", pauseActivity);
+document.addEventListener("input", (event) => {
+  if (event.target.id !== "sound-volume") return;
+  soundVolume = Number(event.target.value);
+  phoneAudio.setVolume(soundVolume / 100);
+  document.querySelector("#sound-level").textContent = `${soundVolume}%`;
+  event.target.setAttribute("aria-valuetext", `${soundVolume}%`);
+});
+document.addEventListener("change", (event) => {
+  if (event.target.id === "sound-style") {
+    soundStyle = event.target.value;
+    phoneAudio.setStyle(soundStyle);
+    tone("key", "5");
+  } else if (event.target.id === "sound-volume") tone("key", "5");
+});
 setTheme(currentTheme());
 showHome();
 clock();
