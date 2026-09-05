@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en" data-theme="porcelain">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#efeee8" />
+    <meta
+      name="description"
+      content="Meet Nabeel Javed, an AI engineer and backend systems specialist in Munich. Open a little flip phone. Discover a lot inside."
+    />
+    <meta
+      property="og:title"
+      content="Nabeel Javed — a pocket-sized portfolio"
+    />
+    <meta
+      property="og:description"
+      content="AI engineering. Backend systems. A little nostalgia. Explore my interactive flip-phone portfolio."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Nabeel Javed — Pocket Portfolio</title>
+    <script>
+      try {
+        const t = localStorage.getItem("nj-phone-theme");
+        if (["porcelain", "graphite", "amber"].includes(t))
+          document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#phone-screen">Skip to portfolio apps</a>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Nabeel Javed, home"
+        ><span class="nj-mark">n<span>j</span><i></i></span
+        ><span>NABEEL JAVED<small>PERSONAL PORTFOLIO</small></span></a
+      >
+      <div class="header-right">
+        <div class="theme-picker" role="group" aria-label="Phone color">
+          <button
+            data-theme-option="porcelain"
+            title="Silver / Porcelain"
+            aria-label="Porcelain theme"
+            aria-pressed="true"
+          >
+            <i></i></button
+          ><button
+            data-theme-option="graphite"
+            title="Graphite"
+            aria-label="Graphite theme"
+            aria-pressed="false"
+          >
+            <i></i></button
+          ><button
+            data-theme-option="amber"
+            title="Champagne / Amber"
+            aria-label="Amber theme"
+            aria-pressed="false"
+          >
+            <i></i>
+          </button>
+        </div>
+        <button class="quick-view-trigger" data-quick-view>
+          Quick view <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+    </header>
+    <main class="desktop" id="main">
+      <section class="intro-note" aria-label="Introduction">
+        <p class="tiny-label">
+          <span class="green-dot"></span> A LITTLE INTRODUCTION
+        </p>
+        <h1>Hello.<br />I'm Nabeel<span class="period">.</span></h1>
+        <p class="intro-role">
+          AI engineer.<br />Backend systems specialist.<br />A curious human.
+        </p>
+        <div class="intro-rule"></div>
+        <p class="location-note">
+          Based in Munich, Germany.<br />Building AI that works in the real
+          world.
+        </p>
+        <a href="/Nabeel-Javed-CV.pdf" class="outside-cv" download
+          >Grab my CV <span aria-hidden="true">↓</span></a
+        >
+        <div class="serial-note">
+          <span>EST. IN CURIOSITY</span><span>✳</span>
+        </div>
+      </section>
+      <section
+        class="phone-scene"
+        aria-label="Interactive flip-phone portfolio"
+      >
+        <div class="phone-wrap">
+          <div class="phone" id="phone">
+            <div class="phone-shadow" aria-hidden="true"></div>
+            <div class="lid" id="phone-lid">
+              <div class="lid-front">
+                <div class="speaker" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <div class="screen-frame">
+                  <div
+                    class="phone-screen"
+                    id="phone-screen"
+                    tabindex="-1"
+                    aria-label="Phone screen"
+                  >
+                    <div class="status-bar">
+                      <span class="signal" aria-label="Signal strength"
+                        ><i></i><i></i><i></i><i></i></span
+                      ><span class="network-name">nabeel.</span
+                      ><span id="sound-indicator" aria-hidden="true">♪̸</span
+                      ><time class="status-time">14:00</time
+                      ><span class="battery" aria-label="Battery full"
+                        ><i></i><i></i><i></i
+                      ></span>
+                    </div>
+                    <div id="screen-content" class="screen-content"></div>
+                    <div class="screen-softkeys">
+                      <button id="screen-left">Menu</button
+                      ><span id="screen-center">Select</span
+                      ><button id="screen-right">Back</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="lid-brand" aria-hidden="true">
+                  <span>N J</span><span>POCKET EDITION</span>
+                </div>
+              </div>
+              <div class="lid-back" aria-hidden="true">
+                <span class="back-brand">n<span>j</span>.</span>
+                <div class="outer-screen">
+                  <span>nabeel.</span><time class="outer-time">14:00</time
+                  ><small>GOOD THINGS INSIDE.</small>
+                </div>
+                <div class="camera-dot"></div>
+                <span class="back-caption">DESIGNED TO CONNECT.</span>
+              </div>
+            </div>
+            <div class="hinge" aria-hidden="true">
+              <span></span><i></i><b>NJ—01</b><i></i><span></span>
+            </div>
+            <div class="phone-base">
+              <span class="side-button side-left" aria-hidden="true"></span
+              ><span class="side-button side-right" aria-hidden="true"></span>
+              <div class="navigation-deck">
+                <div class="soft-column">
+                  <button
+                    id="physical-menu"
+                    class="soft-button"
+                    aria-label="Open app menu"
+                  >
+                    <span aria-hidden="true">—</span></button
+                  ><button
+                    id="call-key"
+                    class="call-key"
+                    aria-label="Open contact app"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M5 4c-2 1-2 5 2 9s8 6 10 4l2-3-4-3-2 2-4-4 2-2-3-4z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="dpad" aria-label="Directional controls">
+                  <button
+                    data-direction="up"
+                    class="dpad-up"
+                    aria-label="Move up"
+                  >
+                    ▴</button
+                  ><button
+                    data-direction="left"
+                    class="dpad-left"
+                    aria-label="Move left"
+                  >
+                    ◂</button
+                  ><button
+                    class="dpad-center"
+                    id="select-key"
+                    aria-label="Select app or item"
+                  >
+                    OK</button
+                  ><button
+                    data-direction="right"
+                    class="dpad-right"
+                    aria-label="Move right"
+                  >
+                    ▸</button
+                  ><button
+                    data-direction="down"
+                    class="dpad-down"
+                    aria-label="Move down"
+                  >
+                    ▾
+                  </button>
+                </div>
+                <div class="soft-column">
+                  <button
+                    id="physical-back"
+                    class="soft-button"
+                    aria-label="Go back"
+                  >
+                    <span aria-hidden="true">—</span></button
+                  ><button
+                    id="end-key"
+                    class="end-key"
+                    aria-label="Return to home screen"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M3 13c3-6 15-6 18 0l-1 4-5-1v-3H9v3l-5 1z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="keypad" aria-label="Phone keypad">
+                <button data-key="1" aria-label="1 — About">
+                  <b>1</b><small>◦ ◦</small></button
+                ><button data-key="2" aria-label="2 — Projects">
+                  <b>2</b><small>abc</small></button
+                ><button data-key="3" aria-label="3 — Experience">
+                  <b>3</b><small>def</small>
+                </button>
+                <button data-key="4" aria-label="4 — Skills">
+                  <b>4</b><small>ghi</small></button
+                ><button data-key="5" aria-label="5 — Contact">
+                  <b>5</b><small>jkl</small></button
+                ><button data-key="6" aria-label="6 — Links">
+                  <b>6</b><small>mno</small>
+                </button>
+                <button data-key="7" aria-label="7 — CV">
+                  <b>7</b><small>pqrs</small></button
+                ><button data-key="8" aria-label="8 — Snake">
+                  <b>8</b><small>tuv</small></button
+                ><button data-key="9" aria-label="9 — Settings">
+                  <b>9</b><small>wxyz</small>
+                </button>
+                <button data-key="*" aria-label="Change phone color">
+                  <b>✳</b><small>color</small></button
+                ><button data-key="0" aria-label="0 — Home">
+                  <b>0</b><small>home</small></button
+                ><button data-key="#" aria-label="Toggle keypad sound">
+                  <b>#</b><small>sound</small>
+                </button>
+              </div>
+              <div class="base-footer" aria-hidden="true">
+                <span class="mic-hole"></span><span>MADE OF IDEAS.</span
+                ><span class="mic-hole"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <button id="fold-phone" aria-expanded="true">
+            Close phone <span aria-hidden="true">↘</span></button
+          ><span class="caption-divider"></span
+          ><button id="sound-toggle" aria-pressed="false">
+            Sound off <span aria-hidden="true">♪</span>
+          </button>
+        </div>
+      </section>
+      <aside class="field-notes" aria-label="How to explore">
+        <div class="note-top">
+          <span>NOT YOUR USUAL<br />CONTACT CARD.</span
+          ><svg viewBox="0 0 110 100" aria-hidden="true">
+            <path
+              d="M100 5C96 48 64 23 72 56S24 91 10 69m0 0 22 3M10 69l12-19"
+            />
+          </svg>
+        </div>
+        <div class="paper-note">
+          <span class="tape" aria-hidden="true"></span>
+          <p class="paper-number">NOTE TO VISITOR / 001</p>
+          <h2>Yes, it works.</h2>
+          <p>Tap an app.<br />Press a button.<br />Get to know me.</p>
+          <div class="note-divider"></div>
+          <p class="note-tip">
+            Try the arrow keys + Enter.<br />Feeling nostalgic? Press <b>8</b>.
+          </p>
+          <span class="drawn-star" aria-hidden="true">✳</span>
+        </div>
+        <p class="outside-footnote">
+          A small screen.<br />A few things worth exploring.
+        </p>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <span>© <span id="year">2026</span> NABEEL JAVED</span
+      ><a href="mailto:nabeeljaved944@gmail.com"
+        >Say hello <span aria-hidden="true">↗</span></a
+      ><span class="footer-location"
+        ><span class="green-dot"></span> MUNICH, DE
+        <time id="munich-time">14:00</time></span
+      >
+    </footer>
+    <p class="sr-only" id="announcement" role="status" aria-live="polite"></p>
+    <dialog id="quick-dialog" aria-labelledby="quick-title">
+      <button id="close-quick" aria-label="Close quick view">×</button>
+      <p class="tiny-label">THE SHORT VERSION</p>
+      <h2 id="quick-title">Nabeel Javed.</h2>
+      <p class="quick-subtitle">
+        AI engineer & backend systems specialist · Munich, Germany
+      </p>
+      <p>
+        I build production AI systems: agent workflows, RAG architectures,
+        evaluation pipelines, and the backend infrastructure that makes them
+        dependable.
+      </p>
+      <h3>Experience</h3>
+      <article>
+        <strong>Careem</strong><span>May 2023 — Present</span>
+        <p>Lead AI + Full Stack Engineer</p>
+        <p>
+          Agentic workflows, retrieval, and Python AI services. Automated 60% of
+          the code review workload and improved p95 latency by 35%.
+        </p>
+      </article>
+      <article>
+        <strong>Arbisoft</strong><span>Jun 2020 — Apr 2023</span>
+        <p>AI-Enabled Backend Developer</p>
+        <p>
+          Highly available backend services supporting 5M monthly EdTech users
+          with 99.9% uptime.
+        </p>
+      </article>
+      <h3>Selected projects</h3>
+      <ul>
+        <li>LangGraph multi-agent pipeline</li>
+        <li>End-to-end RAG platform</li>
+        <li>Model fine-tuning & evaluation harnesses</li>
+        <li>LLM static analysis engine</li>
+        <li>Real-time ML pricing engine — 500K+ daily requests</li>
+      </ul>
+      <h3>Core tools</h3>
+      <p>
+        Python · FastAPI · LangGraph · PGVector · PostgreSQL · Redis · AWS · GCP
+      </p>
+      <div class="quick-links">
+        <a href="/Nabeel-Javed-CV.pdf" download>Download CV ↓</a
+        ><a href="mailto:nabeeljaved944@gmail.com">Email ↗</a
+        ><a
+          href="https://github.com/Nabeel-javed"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        ><a
+          href="https://www.linkedin.com/in/nabeel-javed/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >LinkedIn ↗</a
+        >
+      </div>
+    </dialog>
+    <noscript
+      ><div class="noscript-note">
+        Enable JavaScript to use the phone, or
+        <a href="/Nabeel-Javed-CV.pdf" download>download my CV</a>.
+      </div></noscript
+    >
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
