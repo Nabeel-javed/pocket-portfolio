@@ -6,6 +6,7 @@ import { createSnake } from "../src/snake.js";
 import { createPhoneAudio } from "../src/audio.js";
 import { createPersonalization, wallpapers } from "../src/personalization.js";
 import { createSecretCode } from "../src/easter-egg.js";
+import { projects } from "../src/projects.js";
 
 const pages = [];
 afterEach(() => {
@@ -44,6 +45,7 @@ function setup({
     createPersonalization(() => window.localStorage);
   window.wallpapers = wallpapers;
   window.createSecretCode = createSecretCode;
+  window.projects = projects;
   window.HTMLElement.prototype.scrollBy = function ({ top }) {
     this.scrollTop += top;
   };
@@ -547,4 +549,111 @@ test("the hidden theme also works when local storage is disabled", () => {
   assert.equal(doc.documentElement.dataset.theme, "aurora");
   click('[data-key="9"]');
   assert.equal(doc.querySelectorAll(".settings-themes button").length, 4);
+});
+
+test("project gallery displays five illustrated albums and preserves the selected album on Back", () => {
+  const { doc, click, key } = setup();
+  click('[data-key="2"]');
+  const cards = doc.querySelectorAll(".project-thumbnail");
+  assert.equal(cards.length, projects.length);
+  cards.forEach((card, index) => {
+    assert.equal(
+      card.querySelector("img").getAttribute("src"),
+      projects[index].image,
+    );
+    assert.match(card.getAttribute("aria-label"), /View /);
+  });
+  key("ArrowDown");
+  key("Enter");
+  assert.match(doc.querySelector(".project-mini").textContent, /Better models/);
+  click("#physical-back");
+  assert.equal(
+    doc.querySelector('.project-thumbnail[aria-current="true"]').dataset
+      .project,
+    "2",
+  );
+});
+
+test("phone gallery buttons and directional keys browse projects with wraparound", () => {
+  const { doc, click, key } = setup();
+  click('[data-key="2"]');
+  click('[data-project="0"]');
+  click('#screen-content [data-project-step="-1"]');
+  assert.match(
+    doc.querySelector(".project-mini").textContent,
+    /ML PRICING ENGINE/,
+  );
+  key("ArrowRight");
+  assert.match(
+    doc.querySelector(".project-mini").textContent,
+    /MULTI-AGENT PIPELINE/,
+  );
+  assert.equal(
+    doc.querySelector(".project-photo-controls > span").textContent,
+    "Concept illustration",
+  );
+  key("ArrowDown");
+  assert.ok(doc.querySelector("#screen-content").scrollTop > 0);
+});
+
+test("larger gallery keeps captions, project details, and phone selection synchronized", () => {
+  const { doc, click, key } = setup();
+  click('[data-key="2"]');
+  click('[data-project="0"]');
+  const trigger = doc.querySelector(".project-photo");
+  trigger.focus();
+  trigger.click();
+  assert.equal(doc.querySelector("#project-dialog").open, true);
+  assert.equal(doc.body.style.overflow, "hidden");
+  assert.equal(doc.activeElement, doc.querySelector("#close-project"));
+  assert.equal(
+    doc.querySelector("#project-viewer-image").getAttribute("src"),
+    projects[0].image,
+  );
+  assert.equal(
+    doc.querySelector("#project-image-label").textContent,
+    "Concept illustration",
+  );
+  key("ArrowLeft");
+  assert.equal(doc.querySelector("#project-position").textContent, "5 / 5");
+  assert.equal(
+    doc.querySelector("#project-viewer-title").textContent,
+    projects[4].subtitle,
+  );
+  assert.equal(doc.querySelectorAll("#project-viewer-details li").length, 3);
+  assert.equal(
+    doc.querySelector(".project-viewer-contact").href,
+    "mailto:nabeeljaved944@gmail.com",
+  );
+  key("2");
+  assert.equal(
+    doc.querySelector("#project-viewer-title").textContent,
+    projects[4].subtitle,
+  );
+  key("Escape");
+  assert.equal(doc.querySelector("#project-dialog").open, false);
+  assert.equal(doc.body.style.overflow, "");
+  assert.equal(doc.activeElement, doc.querySelector(".project-photo"));
+  assert.match(
+    doc.querySelector(".project-mini").textContent,
+    /ML PRICING ENGINE/,
+  );
+  click("#physical-back");
+  assert.equal(
+    doc.querySelector('.project-thumbnail[aria-current="true"]').dataset
+      .project,
+    "4",
+  );
+});
+
+test("physical OK opens the larger viewer and closing restores the hardware focus", () => {
+  const { doc, click } = setup();
+  click('[data-key="2"]');
+  click('[data-project="1"]');
+  const select = doc.querySelector("#select-key");
+  select.focus();
+  select.click();
+  assert.equal(doc.querySelector("#project-dialog").open, true);
+  click("#close-project");
+  assert.equal(doc.activeElement, select);
 });

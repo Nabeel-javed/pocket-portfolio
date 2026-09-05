@@ -1730,6 +1730,208 @@ h1 {
   color: var(--screen-highlight);
   letter-spacing: 0.5px;
 }
+.project-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 9px;
+  min-height: 191px;
+  background: #1e3448;
+}
+.project-thumbnail {
+  min-width: 0;
+  padding: 3px;
+  border: 1px solid #819aaa4f;
+  border-radius: 3px;
+  background: #bbc9c81a;
+  color: #ecf0e4;
+  text-align: left;
+}
+.project-thumbnail img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 18 / 11;
+  object-fit: contain;
+  border-radius: 1px;
+}
+.project-thumbnail.selected {
+  border-color: #e0e6be;
+  background: #d4dfba25;
+}
+.project-thumbnail:hover {
+  background: #d4dfba35;
+}
+.project-thumbnail-title {
+  display: block;
+  padding: 6px 2px 3px;
+  font: 6px/1.6 var(--mono);
+}
+.project-thumbnail-title small {
+  color: #bed0a9;
+  font-size: 5px;
+  margin-right: 4px;
+}
+.gallery-note {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #a9bec8;
+  font: 5px/1.7 var(--mono);
+  letter-spacing: 0.5px;
+}
+.gallery-note > span {
+  font-size: 25px;
+  color: #b9cbb5;
+  letter-spacing: -1.5px;
+  margin-bottom: 3px;
+}
+.project-photo-wrap {
+  background: #152b3e;
+  padding: 7px 9px 0;
+}
+.project-photo {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 0;
+  background: #243d4d;
+  border: 1px solid #9eb6c455;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.project-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 18 / 11;
+  object-fit: contain;
+}
+.project-photo > span {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  background: #e0e8cb;
+  color: #31494c;
+  border-radius: 2px;
+  font-size: 12px;
+}
+.project-photo-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  font: 5px var(--mono);
+  color: #c2ced5;
+}
+.project-photo-controls button {
+  padding: 5px 10px;
+  background: transparent;
+  color: #e0e9d8;
+  font-size: 12px;
+}
+.project-photo-controls button:hover {
+  color: #fff;
+  background: #cbdabd20;
+}
+#project-dialog {
+  width: min(780px, calc(100% - 30px));
+  padding: 46px 24px 28px;
+}
+#close-project {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: none;
+  color: var(--ink);
+  font-size: 28px;
+}
+.project-viewer-figure {
+  margin: 0;
+}
+#project-viewer-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 46dvh;
+  object-fit: contain;
+  background: #243b47;
+  border-radius: 4px;
+}
+#project-image-label {
+  font: 8px var(--mono);
+  color: var(--muted);
+  padding-top: 8px;
+  text-align: right;
+}
+.project-viewer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.project-viewer-nav button {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  border-radius: 3px;
+  font: 10px var(--mono);
+}
+.project-viewer-nav button:hover {
+  background: var(--paper);
+  color: var(--paper-ink);
+}
+#project-position {
+  font: 10px var(--mono);
+  color: var(--muted);
+}
+#project-viewer-details {
+  padding: 24px 5px 0;
+}
+#project-viewer-title {
+  font-size: clamp(25px, 4vw, 38px);
+  margin: 11px 0 15px;
+  letter-spacing: -1.2px;
+}
+.project-viewer-description {
+  font-size: 14px;
+  line-height: 1.75;
+}
+#project-viewer-details ul {
+  margin: 16px 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.project-viewer-stack {
+  font: 10px/1.8 var(--mono);
+  color: var(--muted);
+  margin-top: 17px;
+}
+.project-viewer-contact {
+  display: inline-flex;
+  gap: 24px;
+  align-items: center;
+  margin-top: 22px;
+  padding: 12px 0 8px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 13px;
+}
 .project-mini h3 {
   font-size: 16px;
   margin-top: 8px;

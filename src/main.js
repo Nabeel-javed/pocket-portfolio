@@ -3,6 +3,7 @@ import { createSnake } from "./snake.js";
 import { createPhoneAudio } from "./audio.js";
 import { createPersonalization, wallpapers } from "./personalization.js";
 import { createSecretCode } from "./easter-egg.js";
+import { projects } from "./projects.js";
 
 const svg = (body) =>
   `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
@@ -46,72 +47,13 @@ const apps = [
   { id: "snake", name: "Snake" },
   { id: "settings", name: "Settings" },
 ];
-const projects = [
-  {
-    title: "Multi-agent pipeline",
-    subtitle: "Agents with a plan. And a fallback.",
-    stack: "Python · LangGraph · Structured outputs",
-    description:
-      "A state-driven workflow for retrieval, planning, tool selection, static analysis, and verification.",
-    points: [
-      "Explicit error states and retries.",
-      "Human-in-the-loop checkpoints.",
-      "Structured output validation.",
-    ],
-  },
-  {
-    title: "RAG platform",
-    subtitle: "Knowledge, within reach.",
-    stack: "PGVector · BM25 · Cohere · Python",
-    description:
-      "An end-to-end retrieval platform combining vector similarity, lexical search, and reranking.",
-    points: [
-      "Tuned chunking and embeddings.",
-      "Hybrid BM25 + embedding search.",
-      "Cohere reranking and metadata routing.",
-    ],
-  },
-  {
-    title: "Fine-tuning & evals",
-    subtitle: "Better models. Measured.",
-    stack: "Python · OpenAI · Gemini · Evals",
-    description:
-      "Domain-specific classification and summarization, paired with model evaluation.",
-    points: [
-      "Supervised fine-tuning.",
-      "Accuracy and hallucination comparisons.",
-      "Cost trade-offs across models.",
-    ],
-  },
-  {
-    title: "Static analysis agent",
-    subtitle: "A second set of engineering eyes.",
-    stack: "LLM agents · API contracts · Static analysis",
-    description:
-      "An engineering review agent for performance, concurrency, and compatibility risks.",
-    points: [
-      "N+1 queries and caching inefficiencies.",
-      "Schema drift and unsafe API contracts.",
-      "Missing idempotency and concurrency risks.",
-    ],
-  },
-  {
-    title: "ML pricing engine",
-    subtitle: "Real-time decisions, at scale.",
-    stack: "Python · Redis · DynamoDB · Autoscaling",
-    description:
-      "A high-throughput pricing system processing 500,000+ requests each day.",
-    points: [
-      "Python-based ML inference.",
-      "Redis caching and DynamoDB state.",
-      "Autoscaling for changing demand.",
-    ],
-  },
-];
+
 const screen = document.querySelector("#screen-content");
 const phoneScreen = document.querySelector("#phone-screen");
 const phone = document.querySelector("#phone");
 const quickDialog = document.querySelector("#quick-dialog");
+const projectDialog = document.querySelector("#project-dialog");
+let projectReturnFocus;
 let route = "home";
 let selected = 0;
 let selectedProject = 0;
@@ -372,10 +314,13 @@ function openApp(id) {
     );
   } else if (id === "work") {
     setContent(
-      appHeader(id, "Selected projects", "5 ITEMS") +
-        `<div class="screen-list">${projects.map((project, i) => `<button class="screen-row ${i === selectedProject ? "selected" : ""}" data-project="${i}"><span class="row-icon">0${i + 1}</span><span><strong>${project.title}</strong><small>${project.stack.split(" · ").slice(0, 2).join(" / ")}</small></span><span class="row-arrow">›</span></button>`).join("")}</div>`,
+      appHeader(id, "Selected projects", "GALLERY / 05") +
+        `<div class="project-gallery" role="group" aria-label="Project albums">${projects.map((project, i) => `<button class="project-thumbnail ${i === selectedProject ? "selected" : ""}" data-project="${i}" aria-label="View ${project.title}" ${i === selectedProject ? 'aria-current="true"' : ""}><img src="${project.image}" alt="" width="720" height="440" loading="lazy"/><span class="project-thumbnail-title"><small>0${i + 1}</small>${project.title}</span></button>`).join("")}<div class="gallery-note"><span>05</span>PROJECTS<br>WORTH A CLOSER LOOK.</div></div>`,
     );
-    updateSoftkeys("Menu", "Open", "Back");
+    updateSoftkeys("Menu", "View", "Back");
+    screen
+      .querySelector(`[data-project="${selectedProject}"]`)
+      ?.scrollIntoView({ block: "nearest", behavior: "instant" });
   } else if (id === "journey") {
     setContent(
       appHeader(id, "Experience", "2020 → NOW") +
@@ -471,11 +416,48 @@ function openProject(index) {
   route = "project";
   const project = projects[index];
   setContent(
-    appHeader("work", "Project details", `0${index + 1} / 05`) +
-      `<div class="app-body project-mini"><span class="project-index">${project.title.toUpperCase()}</span><h3>${project.subtitle}</h3><p>${project.description}</p><ul>${project.points.map((point) => `<li>${point}</li>`).join("")}</ul><p class="project-stack">${project.stack}</p><button class="screen-action" data-app="contact">Talk about this project <span>↗</span></button></div>`,
+    appHeader("work", "Project gallery", `0${index + 1} / 05`) +
+      `<div class="project-photo-wrap"><button class="project-photo" data-expand-project aria-label="Enlarge ${project.title}"><img src="${project.image}" alt="${project.imageAlt}" width="720" height="440"/><span aria-hidden="true">↗</span></button><div class="project-photo-controls"><button data-project-step="-1" aria-label="Previous project">←</button><span>${project.imageLabel}</span><button data-project-step="1" aria-label="Next project">→</button></div></div><div class="app-body project-mini"><span class="project-index">${project.title.toUpperCase()}</span><h3>${project.subtitle}</h3><p>${project.description}</p><ul>${project.points.map((point) => `<li>${point}</li>`).join("")}</ul><p class="project-stack">${project.stack}</p><button class="screen-action" data-expand-project>Open larger view <span>↗</span></button><button class="screen-action" data-app="contact">Talk about this project <span>↗</span></button></div>`,
   );
-  updateSoftkeys("Menu", "↑ ↓", "Back");
-  announce(`${project.title} details opened.`);
+  updateSoftkeys("Menu", "Enlarge", "Back");
+  announce(
+    `${project.title}. Left or right changes project. OK opens a larger view.`,
+  );
+}
+function renderProjectViewer() {
+  const project = projects[selectedProject];
+  const image = projectDialog.querySelector("#project-viewer-image");
+  image.src = project.image;
+  image.alt = project.imageAlt;
+  projectDialog.querySelector("#project-image-label").textContent =
+    project.imageLabel;
+  projectDialog.querySelector("#project-position").textContent =
+    `${selectedProject + 1} / ${projects.length}`;
+  projectDialog.querySelector("#project-viewer-details").innerHTML =
+    `<p class="tiny-label">${project.title.toUpperCase()}</p><h2 id="project-viewer-title">${project.subtitle}</h2><p class="project-viewer-description">${project.description}</p><ul>${project.points.map((point) => `<li>${point}</li>`).join("")}</ul><p class="project-viewer-stack">${project.stack}</p><a class="project-viewer-contact" href="mailto:nabeeljaved944@gmail.com">Talk about this project <span aria-hidden="true">↗</span></a>`;
+}
+function showProjectViewer() {
+  if (route !== "project" || quickDialog.open || projectDialog.open) return;
+  projectReturnFocus = document.activeElement;
+  phoneAudio.stop();
+  game?.pause();
+  renderProjectViewer();
+  projectDialog.showModal();
+  document.body.style.overflow = "hidden";
+  projectDialog.scrollTop = 0;
+  projectDialog.querySelector("#close-project").focus();
+}
+function changeProject(step) {
+  const focused = document.activeElement;
+  openProject((selectedProject + step + projects.length) % projects.length);
+  if (projectDialog.open) {
+    renderProjectViewer();
+    projectDialog.scrollTop = 0;
+  } else if (focused.matches("[data-project-step]")) {
+    screen
+      .querySelector(`[data-project-step="${step}"]`)
+      ?.focus({ preventScroll: true });
+  }
 }
 function back() {
   tone("back");
@@ -533,14 +515,28 @@ function move(direction) {
       else button.removeAttribute("aria-current");
     });
     announce(`${apps[selected].name}, ${selected + 1} of 9`);
+  } else if (
+    route === "project" &&
+    (direction === "left" || direction === "right")
+  ) {
+    changeProject(direction === "left" ? -1 : 1);
   } else if (route === "work") {
     selectedProject =
       (selectedProject +
-        (direction === "up" || direction === "left" ? -1 : 1) +
+        (direction === "up"
+          ? -2
+          : direction === "down"
+            ? 2
+            : direction === "left"
+              ? -1
+              : 1) +
         projects.length) %
       projects.length;
     screen.querySelectorAll("[data-project]").forEach((button, index) => {
       button.classList.toggle("selected", index === selectedProject);
+      if (index === selectedProject)
+        button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
       if (index === selectedProject)
         button.scrollIntoView({ block: "nearest", behavior: "instant" });
     });
@@ -569,6 +565,7 @@ function select() {
   } else if (route === "home") openApp(apps[selected].id);
   else if (route === "work") openProject(selectedProject);
   else if (route === "snake") game?.toggle();
+  else if (route === "project") showProjectViewer();
   else screen.querySelector(".screen-action,.screen-row")?.click();
 }
 function numberKey(key) {
@@ -626,6 +623,16 @@ document.addEventListener(
   true,
 );
 document.addEventListener("click", async (event) => {
+  if (event.target.closest("[data-expand-project]")) {
+    showProjectViewer();
+    return;
+  }
+  const galleryStep = event.target.closest("[data-project-step]");
+  if (galleryStep) {
+    tone("navigate");
+    changeProject(Number(galleryStep.dataset.projectStep));
+    return;
+  }
   if (event.target.closest("[data-secret-home]")) {
     tone("confirm");
     showHome();
@@ -757,9 +764,49 @@ quickDialog.addEventListener("click", (event) => {
   )
     quickDialog.close();
 });
+projectDialog
+  .querySelector("#close-project")
+  .addEventListener("click", () => projectDialog.close());
+projectDialog.addEventListener("close", () => {
+  document.body.style.overflow = quickDialog.open ? "hidden" : "";
+  const target = projectReturnFocus?.isConnected
+    ? projectReturnFocus
+    : screen.querySelector("[data-expand-project]") || phoneScreen;
+  target?.focus({ preventScroll: true });
+});
+projectDialog.addEventListener("click", (event) => {
+  if (event.target !== projectDialog) return;
+  const bounds = projectDialog.getBoundingClientRect();
+  if (
+    event.clientX < bounds.left ||
+    event.clientX > bounds.right ||
+    event.clientY < bounds.top ||
+    event.clientY > bounds.bottom
+  )
+    projectDialog.close();
+});
+projectDialog.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    event.stopPropagation();
+    projectDialog.close();
+    return;
+  }
+  if (
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    !["ArrowLeft", "ArrowRight"].includes(event.key)
+  )
+    return;
+  event.preventDefault();
+  tone("navigate");
+  changeProject(event.key === "ArrowLeft" ? -1 : 1);
+});
 document.addEventListener("keydown", (event) => {
   if (
     quickDialog.open ||
+    projectDialog.open ||
     event.altKey ||
     event.ctrlKey ||
     event.metaKey ||

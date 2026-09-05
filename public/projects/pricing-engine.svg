@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" fill="none">
+<rect width="720" height="440" fill="#35534c"/><circle cx="361" cy="220" r="156" fill="#41665b"/><path d="M0 360H720M0 80H720" stroke="#b7c9a1" stroke-opacity=".2"/>
+<g font-family="monospace" fill="#dce7c8"><text x="36" y="43" font-size="12" letter-spacing="3">05 / ML PRICING ENGINE</text><text x="36" y="397" font-size="12" letter-spacing="2">REAL-TIME DECISIONS, AT SCALE.</text></g>
+<path d="M87 172H271M87 218H271M87 264H271M439 218H616" stroke="#a3c1a5" stroke-width="2" stroke-dasharray="7 7"/>
+<g fill="#b6cba7"><circle cx="110" cy="172" r="6"/><circle cx="170" cy="218" r="6"/><circle cx="135" cy="264" r="6"/></g>
+<path d="M355 119L445 170V266L355 318L265 266V170z" fill="#d0dab2" stroke="#e8edca" stroke-width="2"/>
+<path d="M335 180H375V220H335zM326 192H335M375 192H384M347 171V180M347 220V229" stroke="#4a6b54" stroke-width="3"/>
+<g font-family="monospace" text-anchor="middle"><text x="355" y="256" fill="#375748" font-size="14">ML INFERENCE</text><text x="355" y="280" fill="#6a7d58" font-size="10">PYTHON</text><text x="145" y="310" fill="#c9dcc0" font-size="11">REQUESTS</text><text x="573" y="306" fill="#c9dcc0" font-size="11">CACHE + STATE</text></g>
+<rect x="526" y="170" width="95" height="96" rx="12" fill="#62846a" stroke="#c5d7b4" stroke-width="2"/><path d="M544 195H604M544 217H604M544 239H590" stroke="#d6e3bf" stroke-width="3"/>
+</svg>

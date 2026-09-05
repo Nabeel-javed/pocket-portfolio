@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" fill="none">
+<rect width="720" height="440" fill="#6b5549"/><circle cx="190" cy="218" r="166" fill="#7a6050"/><path d="M0 360H720M0 80H720" stroke="#dbc5a5" stroke-opacity=".25"/>
+<g font-family="monospace" fill="#efe0c5"><text x="36" y="43" font-size="12" letter-spacing="3">03 / FINE-TUNING + EVALS</text><text x="36" y="397" font-size="12" letter-spacing="2">BETTER MODELS. MEASURED.</text></g>
+<g stroke="#e0cbb0" stroke-width="2"><rect x="100" y="135" width="143" height="170" rx="10" fill="#9b7d63"/><rect x="284" y="135" width="143" height="170" rx="10" fill="#b09572"/><rect x="468" y="135" width="143" height="170" rx="10" fill="#d8c5a2"/></g>
+<g stroke="#f3e4c8" stroke-width="3"><path d="M125 184H211M125 203H196M125 222H217M310 184H398M310 203H384M310 222H397"/></g>
+<g font-family="monospace" text-anchor="middle" font-size="11"><text x="171" y="275" fill="#f2e3c9">BASELINE</text><text x="355" y="275" fill="#f2e3c9">FINE-TUNED</text><text x="539" y="275" fill="#624f45">EVALUATION</text></g>
+<circle cx="531" cy="200" r="27" stroke="#735d4d" stroke-width="3"/><path d="M550 220L570 240M519 201L528 210L544 191" stroke="#735d4d" stroke-width="3"/>
+</svg>

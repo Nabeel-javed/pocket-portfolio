@@ -37,6 +37,13 @@ The generated `dist/` directory is suitable for static hosting at a domain root.
 - A 1.8-second signature startup appears on the first visit. Skip it with the on-screen button or use the phone controls immediately. Settings → Replay startup brings it back with a short melody. Reduced-motion preferences bypass the animation.
 - Snake shows SCORE and BEST, saves a new personal best during play, and retains it between rounds and visits on the same browser. Clearing site data clears the record and wallpaper choice.
 - A homepage clue leads to a hidden Aurora finish. Discovery works with the physical keypad or keyboard outside Snake, unlocks a short celebration, and saves access locally. Aurora then appears in the finish picker and star-key cycle.
+- Projects opens a photo-style gallery of five projects. Select a tile, browse with left/right, and press OK or tap the image for a larger view. The larger gallery supports arrow keys, previous/next buttons, and Escape; closing it restores phone focus and selection.
+
+## Project images
+
+The current gallery uses original **concept illustrations**, visibly labelled as such. These depict ideas from the existing project descriptions; they are not product screenshots or evidence of a particular interface.
+
+Project text and image metadata live in `src/projects.js`. To add a supplied screenshot, put the public-safe image in `public/projects/`, then update that project's `image`, `imageAlt`, and `imageLabel`. The phone tiles, project detail screen, and larger viewer all use the same record. Actual screenshots have not been supplied yet.
 
 ## Files
 
@@ -44,8 +51,10 @@ The generated `dist/` directory is suitable for static hosting at a domain root.
 - `src/audio.js`: original Web Audio synthesis, volume, sound styles, and playback cleanup. No downloaded audio assets.
 - `src/personalization.js`: wallpaper choices and resilient local preference / high-score storage.
 - `src/easter-egg.js`: bounded secret-code recognition with interruption and inactivity resets.
+- `src/projects.js`: project descriptions and gallery image metadata.
+- `public/projects/`: original project concept illustrations, ready to be supplemented or replaced with supplied screenshots.
 - `public/wallpapers/`: original SVG pixel scenes, with no external image requests.
-- `src/style.css`: the three color finishes, responsive layout, hardware illustration, folding, and app styles.
+- `src/style.css`: the standard and unlocked color finishes, responsive layout, hardware illustration, folding, gallery, and app styles.
 - `src/main.js`: portfolio content, navigation, app screens, keyboard controls, audio feedback, themes, clock, and dialog behavior.
 - `src/snake.js`: standalone game rules and canvas renderer.
 - `tests/phone.test.js`: DOM-based phone interaction regression tests.

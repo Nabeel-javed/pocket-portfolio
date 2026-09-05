@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" fill="none">
+<rect width="720" height="440" fill="#393b59"/><circle cx="463" cy="223" r="147" fill="#484766"/><path d="M0 360H720M0 80H720" stroke="#ada3c3" stroke-opacity=".2"/>
+<g font-family="monospace" fill="#e3d9ea"><text x="36" y="43" font-size="12" letter-spacing="3">02 / RAG PLATFORM</text><text x="36" y="397" font-size="12" letter-spacing="2">FIND THE RIGHT CONTEXT.</text></g>
+<g stroke="#c6b7d4" stroke-width="2"><rect x="80" y="126" width="102" height="148" rx="6" fill="#66617d"/><rect x="105" y="145" width="102" height="148" rx="6" fill="#81748e"/><rect x="132" y="165" width="102" height="148" rx="6" fill="#d7c3d2"/></g>
+<path d="M153 192H210M153 210H202M153 228H210M153 246H186" stroke="#7c6680" stroke-width="3"/>
+<path d="M248 213H313M248 257H313M359 170L448 200M359 288L448 249M484 222H602" stroke="#b9b1d0" stroke-width="2" stroke-dasharray="5 5"/>
+<circle cx="345" cy="170" r="27" fill="#aaaacb"/><circle cx="345" cy="288" r="27" fill="#cdafc2"/><circle cx="470" cy="224" r="46" fill="#d9d3de"/>
+<path d="M452 224L465 237L489 211" stroke="#61536f" stroke-width="3"/>
+<g font-family="monospace" text-anchor="middle" font-size="10" fill="#e3d9ea"><text x="345" y="126">VECTOR</text><text x="345" y="335">KEYWORD</text><text x="470" y="290">RERANK</text><text x="610" y="251">CONTEXT</text></g>
+<rect x="580" y="199" width="62" height="46" rx="6" fill="#aaaacb"/><path d="M596 214H626M596 226H619" stroke="#514866" stroke-width="2"/>
+</svg>

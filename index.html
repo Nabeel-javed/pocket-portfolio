@@ -375,6 +375,21 @@
         >
       </div>
     </dialog>
+    <dialog id="project-dialog" aria-labelledby="project-viewer-title">
+      <button id="close-project" aria-label="Close project gallery">×</button>
+      <figure class="project-viewer-figure">
+        <img id="project-viewer-image" alt="" width="720" height="440" />
+        <figcaption id="project-image-label"></figcaption>
+      </figure>
+      <nav class="project-viewer-nav" aria-label="Project gallery navigation">
+        <button data-project-step="-1" aria-label="Previous project">
+          ← Previous
+        </button>
+        <span id="project-position" aria-live="polite"></span>
+        <button data-project-step="1" aria-label="Next project">Next →</button>
+      </nav>
+      <div id="project-viewer-details"></div>
+    </dialog>
     <noscript
       ><div class="noscript-note">
         Enable JavaScript to use the phone, or

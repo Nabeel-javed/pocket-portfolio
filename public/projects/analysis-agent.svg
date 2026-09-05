@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" fill="none">
+<rect width="720" height="440" fill="#2d4657"/><circle cx="534" cy="209" r="165" fill="#365466"/><path d="M0 360H720M0 80H720" stroke="#acc8d2" stroke-opacity=".2"/>
+<g font-family="monospace" fill="#d6e5df"><text x="36" y="43" font-size="12" letter-spacing="3">04 / STATIC ANALYSIS AGENT</text><text x="36" y="397" font-size="12" letter-spacing="2">A SECOND SET OF ENGINEERING EYES.</text></g>
+<rect x="90" y="123" width="313" height="191" rx="10" fill="#203949" stroke="#99b7bc" stroke-width="2"/>
+<path d="M116 155H152M170 155H258M137 179H272M137 202H240M262 202H329M137 225H290M116 249H159M116 273H220" stroke="#a8c4c9" stroke-width="4"/>
+<path d="M170 155H258M262 202H329" stroke="#dfc995" stroke-width="4"/>
+<path d="M419 180H481M419 220H481M419 260H481" stroke="#8eaeb6" stroke-width="2" stroke-dasharray="6 5"/>
+<g fill="#bfd4c0"><circle cx="494" cy="180" r="9"/><circle cx="494" cy="220" r="9"/><circle cx="494" cy="260" r="9"/></g>
+<g font-family="monospace" font-size="11" fill="#dce8df"><text x="516" y="184">PERFORMANCE</text><text x="516" y="224">CONCURRENCY</text><text x="516" y="264">COMPATIBILITY</text></g>
+</svg>

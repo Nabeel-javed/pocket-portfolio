@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" fill="none">
+<rect width="720" height="440" fill="#203c49"/><circle cx="580" cy="210" r="185" fill="#294b56"/><path d="M0 360H720M0 80H720" stroke="#67827d" stroke-opacity=".25"/>
+<g font-family="monospace" fill="#d8e5c9"><text x="36" y="43" font-size="12" letter-spacing="3">01 / MULTI-AGENT PIPELINE</text><text x="36" y="397" font-size="12" letter-spacing="2">PLAN. COORDINATE. VERIFY.</text></g>
+<path d="M146 204H286M426 204H568M356 247V302H146V247M568 247V302H426" stroke="#8eaf9a" stroke-width="2" stroke-dasharray="7 6"/>
+<g stroke="#b8cdad" stroke-width="2"><rect x="74" y="159" width="144" height="90" rx="12" fill="#2f5358"/><rect x="284" y="130" width="144" height="148" rx="18" fill="#d6e1bc"/><rect x="496" y="159" width="144" height="90" rx="12" fill="#2f5358"/></g>
+<g font-family="monospace" text-anchor="middle" font-size="13"><text x="146" y="200" fill="#e2ecd7">RETRIEVAL</text><text x="146" y="223" fill="#a9c6b9" font-size="10">CONTEXT</text><text x="356" y="225" fill="#274443">PLANNING</text><text x="568" y="200" fill="#e2ecd7">TOOLS</text><text x="568" y="223" fill="#a9c6b9" font-size="10">ACTION</text><text x="356" y="334" fill="#bcd2c2" font-size="11">VERIFICATION + RETRIES</text></g>
+<path d="M342 164H370V192H342zM336 174H342M370 174H376M350 158V164M350 192V198" stroke="#476859" stroke-width="2"/>
+</svg>
