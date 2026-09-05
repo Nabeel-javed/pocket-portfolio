@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
 import { createSnake } from "../src/snake.js";
 import { createPhoneAudio } from "../src/audio.js";
+import { createPersonalization, wallpapers } from "../src/personalization.js";
 
 const pages = [];
 afterEach(() => {
@@ -13,7 +14,12 @@ afterEach(() => {
   }
   pages.length = 0;
 });
-function setup({ audio } = {}) {
+function setup({
+  audio,
+  reducedMotion = true,
+  stored = {},
+  blockedStorage = false,
+} = {}) {
   const page = new JSDOM(
     readFileSync(new URL("../index.html", import.meta.url), "utf8"),
     {
@@ -24,7 +30,18 @@ function setup({ audio } = {}) {
   );
   const { window } = page;
   pages.push(page);
-  window.matchMedia = () => ({ matches: true });
+  window.matchMedia = () => ({ matches: reducedMotion });
+  for (const [key, value] of Object.entries(stored))
+    window.localStorage.setItem(key, value);
+  if (blockedStorage)
+    Object.defineProperty(window, "localStorage", {
+      get() {
+        throw new Error("Storage blocked");
+      },
+    });
+  window.createPersonalization = () =>
+    createPersonalization(() => window.localStorage);
+  window.wallpapers = wallpapers;
   window.HTMLElement.prototype.scrollBy = function ({ top }) {
     this.scrollTop += top;
   };
@@ -302,4 +319,154 @@ test("keypad and lid dispatch distinct sounds, and backgrounding cancels audio",
   Object.defineProperty(doc, "hidden", { value: true, configurable: true });
   doc.dispatchEvent(new window.Event("visibilitychange"));
   assert.deepEqual(events.at(-1), ["stop"]);
+});
+
+test("wallpapers apply independently of phone finish and survive a new page visit", () => {
+  const { window, doc, click } = setup();
+  click('[data-key="9"]');
+  click("[data-open-wallpapers]");
+  for (const id of ["munich", "alpine", "midnight", "original"]) {
+    click(`[data-wallpaper-option="${id}"]`);
+    assert.equal(doc.documentElement.dataset.wallpaper, id);
+    assert.equal(window.localStorage.getItem("nj-phone-wallpaper"), id);
+    assert.equal(
+      doc.querySelector('[data-wallpaper-option][aria-pressed="true"]').dataset
+        .wallpaperOption,
+      id,
+    );
+  }
+  click('[data-wallpaper-option="munich"]');
+  click('[data-theme-option="amber"]');
+  assert.equal(doc.documentElement.dataset.wallpaper, "munich");
+  click("#physical-back");
+  assert.match(
+    doc.querySelector("[data-open-wallpapers]").textContent,
+    /Munich/,
+  );
+  const next = setup({
+    stored: {
+      "nj-phone-wallpaper": window.localStorage.getItem("nj-phone-wallpaper"),
+    },
+  });
+  assert.equal(next.doc.documentElement.dataset.wallpaper, "munich");
+});
+
+test("D-pad previews wallpapers and OK applies the highlighted scene", () => {
+  const { doc, click, key } = setup();
+  click('[data-key="9"]');
+  click("[data-open-wallpapers]");
+  key("ArrowRight");
+  assert.equal(
+    doc.querySelector(".wallpaper-preview").dataset.wallpaper,
+    "munich",
+  );
+  assert.equal(doc.documentElement.dataset.wallpaper, "original");
+  key("Enter");
+  assert.equal(doc.documentElement.dataset.wallpaper, "munich");
+  key("ArrowDown");
+  key("Enter");
+  assert.equal(doc.documentElement.dataset.wallpaper, "midnight");
+});
+
+test("first-visit startup is skippable, repeat visits bypass it, and Settings replays it", () => {
+  const { window, doc, click } = setup({ reducedMotion: false });
+  assert.ok(doc.querySelector(".startup-screen"));
+  assert.equal(window.localStorage.getItem("nj-phone-startup-seen"), "1");
+  click("[data-skip-startup]");
+  assert.ok(doc.querySelector(".app-grid"));
+  assert.equal(doc.activeElement, doc.querySelector("#phone-screen"));
+  click('[data-key="9"]');
+  click("[data-replay-startup]");
+  assert.ok(doc.querySelector(".startup-screen"));
+  click("#select-key");
+  assert.ok(doc.querySelector(".app-grid"));
+  const returning = setup({
+    reducedMotion: false,
+    stored: { "nj-phone-startup-seen": "1" },
+  });
+  assert.equal(returning.doc.querySelector(".startup-screen"), null);
+});
+
+test("startup finishes automatically without overriding navigation, a closed lid, or Quick view", async () => {
+  const auto = setup({ reducedMotion: false });
+  auto.doc.querySelector("[data-skip-startup]").focus();
+  const navigated = setup({ reducedMotion: false });
+  navigated.click('[data-key="2"]');
+  const folded = setup({ reducedMotion: false });
+  folded.click("#fold-phone");
+  const quick = setup({ reducedMotion: false });
+  quick.click(".quick-view-trigger");
+  await new Promise((resolve) => setTimeout(resolve, 1900));
+  assert.ok(auto.doc.querySelector(".app-grid"));
+  assert.equal(auto.doc.activeElement, auto.doc.querySelector("#phone-screen"));
+  assert.equal(
+    navigated.doc.querySelector(".app-header > span").textContent,
+    "Selected projects",
+  );
+  assert.ok(folded.doc.querySelector("#phone").classList.contains("is-closed"));
+  assert.equal(quick.doc.querySelector("#quick-dialog").open, true);
+  assert.equal(
+    quick.doc.activeElement,
+    quick.doc.querySelector("#close-quick"),
+  );
+});
+
+test("reduced motion bypasses the startup animation, including replay", () => {
+  const { doc, click } = setup();
+  assert.equal(doc.querySelector(".startup-screen"), null);
+  click('[data-key="9"]');
+  click("[data-replay-startup]");
+  assert.ok(doc.querySelector(".app-grid"));
+});
+
+test("Snake saves a best score during actual play and retains it after leaving and reloading", (t) => {
+  t.mock.timers.enable({ apis: ["setInterval"] });
+  const { window, doc, click } = setup();
+  click('[data-key="8"]');
+  click("#snake-start");
+  t.mock.timers.tick(950);
+  assert.equal(doc.querySelector("#snake-score").textContent, "SCORE 01");
+  assert.equal(doc.querySelector("#snake-best").textContent, "BEST 01");
+  assert.equal(window.localStorage.getItem("nj-snake-best"), "1");
+  click("#physical-menu");
+  click('[data-key="8"]');
+  assert.equal(doc.querySelector("#snake-score").textContent, "SCORE 00");
+  assert.equal(doc.querySelector("#snake-best").textContent, "BEST 01");
+  const next = setup({
+    stored: { "nj-snake-best": window.localStorage.getItem("nj-snake-best") },
+  });
+  next.click('[data-key="8"]');
+  assert.equal(next.doc.querySelector("#snake-best").textContent, "BEST 01");
+});
+
+test("a lower Snake score cannot overwrite an existing record", (t) => {
+  t.mock.timers.enable({ apis: ["setInterval"] });
+  const { window, doc, click } = setup({ stored: { "nj-snake-best": "12" } });
+  click('[data-key="8"]');
+  click("#snake-start");
+  t.mock.timers.tick(2090);
+  assert.equal(doc.querySelector("#snake-best").textContent, "BEST 12");
+  assert.equal(window.localStorage.getItem("nj-snake-best"), "12");
+  assert.equal(
+    doc.querySelector("#snake-best").classList.contains("new-record"),
+    false,
+  );
+});
+
+test("invalid saved values and disabled storage do not break personalization", () => {
+  for (const value of ["-1", "999", "NaN", "2.5"]) {
+    const { doc, click } = setup({
+      stored: { "nj-snake-best": value, "nj-phone-wallpaper": "missing" },
+    });
+    click('[data-key="8"]');
+    assert.equal(doc.querySelector("#snake-best").textContent, "BEST 00");
+    assert.equal(doc.documentElement.dataset.wallpaper, "original");
+  }
+  const { doc, click } = setup({ blockedStorage: true });
+  click('[data-key="9"]');
+  click("[data-open-wallpapers]");
+  click('[data-wallpaper-option="alpine"]');
+  assert.equal(doc.documentElement.dataset.wallpaper, "alpine");
+  click('[data-key="8"]');
+  assert.equal(doc.querySelector("#snake-best").textContent, "BEST 00");
 });

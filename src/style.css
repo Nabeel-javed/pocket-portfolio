@@ -1203,6 +1203,186 @@ h1 {
   gap: 12px;
   align-items: center;
 }
+.wallpaper-art {
+  background: linear-gradient(
+    150deg,
+    var(--screen-sky),
+    var(--screen-deep) 84%
+  );
+  background-size: cover;
+  background-position: center;
+}
+:root[data-wallpaper="munich"] .home-screen,
+.wallpaper-art[data-wallpaper="munich"] {
+  background-image:
+    linear-gradient(#14253820, #14253865), url("/wallpapers/munich.svg");
+}
+:root[data-wallpaper="alpine"] .home-screen,
+.wallpaper-art[data-wallpaper="alpine"] {
+  background-image:
+    linear-gradient(#14253825, #14253865), url("/wallpapers/alpine.svg");
+}
+:root[data-wallpaper="midnight"] .home-screen,
+.wallpaper-art[data-wallpaper="midnight"] {
+  background-image: url("/wallpapers/midnight.svg");
+}
+:root:not([data-wallpaper="original"]) .home-screen {
+  background-size: cover;
+  background-position: center;
+}
+:root:not([data-wallpaper="original"]) .home-screen::before,
+:root:not([data-wallpaper="original"]) .home-screen::after {
+  display: none;
+}
+:root:not([data-wallpaper="original"]) .home-screen .app-icon:not(.selected) {
+  background: #15283e3d;
+}
+.wallpaper-page {
+  min-height: 191px;
+  padding: 9px 10px;
+  background: #213b50;
+  color: #e3ecd9;
+}
+.wallpaper-preview {
+  height: 72px;
+  border: 1px solid #adc5d34d;
+  border-radius: 3px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-shadow: 0 1px 4px #122034;
+}
+.wallpaper-preview span {
+  font: 5px var(--mono);
+  letter-spacing: 0.7px;
+}
+.wallpaper-preview strong {
+  font-size: 18px;
+  font-weight: 500;
+}
+.wallpaper-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-top: 8px;
+}
+.wallpaper-options button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  background: #a5bbc812;
+  border: 1px solid #adcad033;
+  border-radius: 3px;
+  color: #eff3e6;
+  font: 6px var(--mono);
+  text-align: left;
+}
+.wallpaper-options button.selected {
+  border-color: #e1e9c8;
+  background: #d1dfc520;
+}
+.wallpaper-options button:hover {
+  background: #d1dfc52e;
+}
+.wallpaper-swatch {
+  width: 28px;
+  height: 23px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.wallpaper-check {
+  margin-left: auto;
+  visibility: hidden;
+  color: #e0ebc2;
+}
+[data-wallpaper-option][aria-pressed="true"] .wallpaper-check {
+  visibility: visible;
+}
+#wallpaper-caption {
+  font: 6px/1.5 var(--mono);
+  margin-top: 8px;
+  color: #c0d2d9;
+}
+.startup-screen {
+  height: 222px;
+  text-align: center;
+  padding: 14px 16px 8px;
+  color: #e5ecd8;
+  background: radial-gradient(ellipse at 50% 40%, #365b59, #172f3a 76%);
+}
+.startup-serial {
+  font: 5px var(--mono);
+  letter-spacing: 0.9px;
+  color: #afc7bd;
+}
+.startup-mark {
+  font:
+    italic 600 55px/1 Georgia,
+    serif;
+  letter-spacing: -6px;
+  margin: 16px auto 6px;
+  animation: startup-reveal 0.9s ease-out both;
+}
+.startup-mark span {
+  color: #c7d8a9;
+}
+.startup-screen h2 {
+  font-size: 19px;
+  font-weight: 450;
+  letter-spacing: -0.6px;
+}
+.startup-edition {
+  font: 5px var(--mono);
+  letter-spacing: 2.4px;
+  margin-top: 6px;
+  color: #b6cdbd;
+}
+.startup-progress {
+  width: 90px;
+  height: 3px;
+  background: #a6c6af22;
+  margin: 19px auto 0;
+  overflow: hidden;
+}
+.startup-progress span {
+  display: block;
+  height: 100%;
+  background: #d9e5ba;
+  transform-origin: left;
+  animation: startup-load 1.7s ease-in-out both;
+}
+.startup-skip {
+  background: none;
+  color: #cfdfd2;
+  font: 6px var(--mono);
+  padding: 8px 12px;
+  margin-top: 10px;
+  border: 1px solid #b8cfbd38;
+  border-radius: 3px;
+}
+.startup-skip:hover {
+  background: #d2e2ce1a;
+}
+@keyframes startup-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.93);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes startup-load {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
 .home-clock {
   font: 28px var(--mono);
   letter-spacing: -2.5px;
@@ -1733,6 +1913,11 @@ h1 {
   justify-content: space-between;
   font: 7px var(--mono);
   padding-bottom: 5px;
+}
+#snake-best.new-record {
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .snake-board {
   width: 234px;

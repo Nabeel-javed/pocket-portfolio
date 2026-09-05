@@ -1,6 +1,7 @@
 import "./style.css";
 import { createSnake } from "./snake.js";
 import { createPhoneAudio } from "./audio.js";
+import { createPersonalization, wallpapers } from "./personalization.js";
 
 const svg = (body) =>
   `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
@@ -122,6 +123,13 @@ let soundVolume = 35;
 let game;
 let toastTimer;
 let quickReturnFocus;
+let startupTimer;
+const { readPreference, savePreference, readHighScore } =
+  createPersonalization();
+let wallpaper = readPreference("nj-phone-wallpaper", "original");
+if (!wallpapers.some((item) => item.id === wallpaper)) wallpaper = "original";
+let wallpaperIndex = wallpapers.findIndex((item) => item.id === wallpaper);
+let highScore = readHighScore();
 
 function announce(text) {
   document.querySelector("#announcement").textContent = text;
@@ -213,6 +221,7 @@ function appHeader(id, title, extra = "") {
   return `<div class="app-header">${icons[id]}<span>${title}</span>${extra ? `<small>${extra}</small>` : ""}</div>`;
 }
 function setContent(html) {
+  clearTimeout(startupTimer);
   screen.innerHTML = html;
   screen.scrollTop = 0;
   screen.classList.remove("screen-enter");
@@ -236,6 +245,75 @@ function showHome() {
   updateSoftkeys("Menu", "Select", "Contact");
   clock();
   announce("Home. Use the apps, arrow keys, or numbers 1 to 9.");
+}
+function setWallpaper(id) {
+  if (!wallpapers.some((item) => item.id === id)) return;
+  wallpaper = id;
+  wallpaperIndex = wallpapers.findIndex((item) => item.id === id);
+  document.documentElement.dataset.wallpaper = id;
+  savePreference("nj-phone-wallpaper", id);
+  updateWallpaperPreview();
+}
+function updateWallpaperPreview() {
+  const preview = screen.querySelector(".wallpaper-preview");
+  const choice = wallpapers[wallpaperIndex];
+  if (preview) {
+    preview.dataset.wallpaper = choice.id;
+    preview.querySelector("strong").textContent = choice.name;
+    screen.querySelector("#wallpaper-caption").textContent = choice.caption;
+  }
+  screen
+    .querySelectorAll("[data-wallpaper-option]")
+    .forEach((button, index) => {
+      button.classList.toggle("selected", index === wallpaperIndex);
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.wallpaperOption === wallpaper),
+      );
+    });
+}
+function openWallpapers() {
+  leaveGame();
+  route = "wallpapers";
+  wallpaperIndex = wallpapers.findIndex((item) => item.id === wallpaper);
+  setContent(
+    appHeader("settings", "Wallpaper", "4 SCENES") +
+      `<div class="wallpaper-page"><div class="wallpaper-preview wallpaper-art" data-wallpaper="${wallpaper}"><span>YOUR POCKET, YOUR VIEW.</span><strong></strong></div><div class="wallpaper-options" role="group" aria-label="Home screen wallpaper">${wallpapers.map((item) => `<button data-wallpaper-option="${item.id}" aria-pressed="${item.id === wallpaper}"><span class="wallpaper-swatch wallpaper-art" data-wallpaper="${item.id}" aria-hidden="true"></span>${item.name}<span class="wallpaper-check" aria-hidden="true">✓</span></button>`).join("")}</div><p id="wallpaper-caption"></p></div>`,
+  );
+  updateWallpaperPreview();
+  updateSoftkeys("Menu", "Apply", "Back");
+  announce("Choose a wallpaper. Use arrows and OK, or tap a scene.");
+}
+function showStartup(withSound = false) {
+  if (closed) fold(false);
+  leaveGame();
+  route = "startup";
+  savePreference("nj-phone-startup-seen", "1");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    showHome();
+    if (withSound) tone("startup");
+    return;
+  }
+  setContent(
+    `<div class="startup-screen"><p class="startup-serial">NJ—01 / DESIGNED TO CONNECT</p><div class="startup-mark" aria-hidden="true">nj<span>.</span></div><h2>nabeel.</h2><p class="startup-edition">POCKET EDITION</p><div class="startup-progress" aria-hidden="true"><span></span></div><button class="startup-skip" data-skip-startup>Skip intro <span aria-hidden="true">↗</span></button></div>`,
+  );
+  updateSoftkeys("Skip", "Enter", "Skip");
+  announce(
+    "Nabeel. Pocket edition. Skip the intro or press a phone key to explore.",
+  );
+  if (withSound) tone("startup");
+  startupTimer = setTimeout(() => {
+    if (route === "startup") {
+      const restoreFocus = screen.contains(document.activeElement);
+      showHome();
+      if (restoreFocus) phoneScreen.focus({ preventScroll: true });
+    }
+  }, 1800);
+}
+function skipStartup() {
+  tone("startup");
+  showHome();
+  phoneScreen.focus({ preventScroll: true });
 }
 function openApp(id) {
   if (closed) fold(false);
@@ -283,12 +361,29 @@ function openApp(id) {
     );
   } else if (id === "settings") renderSettings();
   else if (id === "snake") {
+    highScore = Math.max(highScore, readHighScore());
+    let newRecord = false;
     setContent(
-      `<div class="snake-page"><div class="snake-top"><span>SNAKE / POCKET EDITION</span><span id="snake-score">SCORE 00</span></div><canvas id="snake-board" class="snake-board" width="234" height="156" role="img" aria-label="Snake game. Use the directional pad or arrow keys. Press OK to start or pause."></canvas><div class="snake-controls"><p id="snake-hint">D-PAD OR ARROW KEYS<br>2 / 4 / 6 / 8 ALSO WORK</p><button id="snake-start">Play ▶</button></div></div>`,
+      `<div class="snake-page"><div class="snake-top"><span>SNAKE</span><span id="snake-score">SCORE 00</span><span id="snake-best" title="Best score on this browser">BEST ${String(highScore).padStart(2, "0")}</span></div><canvas id="snake-board" class="snake-board" width="234" height="156" role="img" aria-label="Snake game. Use the directional pad or arrow keys. Press OK to start or pause."></canvas><div class="snake-controls"><p id="snake-hint">D-PAD OR ARROW KEYS<br>2 / 4 / 6 / 8 ALSO WORK</p><button id="snake-start">Play ▶</button></div></div>`,
     );
     updateSoftkeys("Menu", "Play", "Back");
     game = createSnake(document.querySelector("#snake-board"), {
       onUpdate(state, score) {
+        if (score === 0) newRecord = false;
+        highScore = Math.max(highScore, readHighScore());
+        if (score > highScore) {
+          highScore = score;
+          newRecord = true;
+          savePreference("nj-snake-best", highScore);
+        }
+        document.querySelector("#snake-best").textContent =
+          `BEST ${String(highScore).padStart(2, "0")}`;
+        document
+          .querySelector("#snake-best")
+          .classList.toggle("new-record", newRecord);
+        document.querySelector("#snake-hint").innerHTML = newRecord
+          ? "NEW PERSONAL BEST!<br>KEEP GOING."
+          : "D-PAD OR ARROW KEYS<br>2 / 4 / 6 / 8 ALSO WORK";
         document.querySelector("#snake-score").textContent =
           `SCORE ${String(score).padStart(2, "0")}`;
         document.querySelector("#snake-start").textContent =
@@ -296,13 +391,19 @@ function openApp(id) {
             ? "Pause Ⅱ"
             : state === "paused"
               ? "Resume ▶"
-              : state === "over"
+              : state === "over" || state === "won"
                 ? "Again ↺"
                 : "Play ▶";
         document.querySelector("#screen-center").textContent =
           state === "running" ? "Pause" : "Play";
-        if (state === "over")
-          announce(`Game over. Score ${score}. Press OK to play again.`);
+        if (state === "over" || state === "won") {
+          document.querySelector("#snake-hint").innerHTML = newRecord
+            ? "NEW PERSONAL BEST!<br>CAN YOU BEAT IT?"
+            : "ONE MORE ROUND?<br>PRESS OK TO PLAY AGAIN.";
+          announce(
+            `${state === "won" ? "You win" : "Game over"}. Score ${score}.${newRecord ? " New personal best!" : ""} Best ${highScore}. Press OK to play again.`,
+          );
+        }
       },
     });
   }
@@ -311,7 +412,7 @@ function openApp(id) {
 function renderSettings() {
   setContent(
     appHeader("settings", "Make it yours") +
-      `<div class="app-body"><p>Pick your pocket edition.</p><div class="settings-themes" role="group" aria-label="Phone color">${["porcelain", "graphite", "amber"].map((theme, i) => `<button data-theme-option="${theme}" aria-label="${theme} phone color" aria-pressed="${currentTheme() === theme}"><i></i>${["Silver", "Graphite", "Champagne"][i]}</button>`).join("")}</div><div class="settings-row"><span>Phone sounds</span><button data-toggle-sound aria-pressed="${sound}">${sound ? "On ♪" : "Off"}</button></div><div class="settings-row"><label for="sound-style">Sound style</label><select id="sound-style"><option value="classic" ${soundStyle === "classic" ? "selected" : ""}>Classic</option><option value="soft" ${soundStyle === "soft" ? "selected" : ""}>Soft</option></select></div><div class="settings-row sound-volume-row"><label for="sound-volume">Volume <output id="sound-level" for="sound-volume">${soundVolume}%</output></label><input id="sound-volume" type="range" min="0" max="100" step="5" value="${soundVolume}" aria-valuetext="${soundVolume}%"></div><button class="screen-action" data-preview-sound>Preview ringtone <span>♪</span></button><div class="settings-row"><span>Phone</span><button data-fold>Close ↘</button></div><p class="settings-hint">✳ changes color · # toggles sound<br>0 takes you home · Esc goes back</p></div>`,
+      `<div class="app-body"><p>Pick your pocket edition.</p><div class="settings-themes" role="group" aria-label="Phone color">${["porcelain", "graphite", "amber"].map((theme, i) => `<button data-theme-option="${theme}" aria-label="${theme} phone color" aria-pressed="${currentTheme() === theme}"><i></i>${["Silver", "Graphite", "Champagne"][i]}</button>`).join("")}</div><button class="screen-action" data-open-wallpapers>Wallpaper <span>${wallpapers.find((item) => item.id === wallpaper).name} ›</span></button><div class="settings-row"><span>Phone sounds</span><button data-toggle-sound aria-pressed="${sound}">${sound ? "On ♪" : "Off"}</button></div><div class="settings-row"><label for="sound-style">Sound style</label><select id="sound-style"><option value="classic" ${soundStyle === "classic" ? "selected" : ""}>Classic</option><option value="soft" ${soundStyle === "soft" ? "selected" : ""}>Soft</option></select></div><div class="settings-row sound-volume-row"><label for="sound-volume">Volume <output id="sound-level" for="sound-volume">${soundVolume}%</output></label><input id="sound-volume" type="range" min="0" max="100" step="5" value="${soundVolume}" aria-valuetext="${soundVolume}%"></div><button class="screen-action" data-preview-sound>Preview ringtone <span>♪</span></button><button class="screen-action" data-replay-startup>Replay startup <span>↻</span></button><div class="settings-row"><span>Phone</span><button data-fold>Close ↘</button></div><p class="settings-hint">✳ changes color · # toggles sound<br>0 takes you home · Esc goes back</p></div>`,
   );
 }
 function openProject(index) {
@@ -328,10 +429,12 @@ function openProject(index) {
 }
 function back() {
   tone("back");
-  if (route === "project") openApp("work");
+  if (route === "wallpapers") openApp("settings");
+  else if (route === "project") openApp("work");
   else showHome();
 }
 function fold(value) {
+  if (value && route === "startup") showHome();
   closed = value;
   if (closed) game?.pause();
   phone.classList.toggle("is-closed", closed);
@@ -349,12 +452,24 @@ function fold(value) {
 }
 function move(direction) {
   if (closed) return;
+  if (route === "startup") showHome();
   tone();
   if (route === "snake") {
     game?.direction(direction);
     return;
   }
-  if (route === "home") {
+  if (route === "wallpapers") {
+    const step =
+      direction === "up" || direction === "down"
+        ? 2
+        : direction === "left"
+          ? -1
+          : 1;
+    wallpaperIndex =
+      (wallpaperIndex + step + wallpapers.length) % wallpapers.length;
+    updateWallpaperPreview();
+    announce(`${wallpapers[wallpaperIndex].name}. Press OK to apply.`);
+  } else if (route === "home") {
     const row = Math.floor(selected / 3),
       column = selected % 3;
     if (direction === "left") selected = row * 3 + ((column + 2) % 3);
@@ -392,8 +507,15 @@ function select() {
     fold(false);
     return;
   }
+  if (route === "startup") {
+    skipStartup();
+    return;
+  }
   tone("confirm");
-  if (route === "home") openApp(apps[selected].id);
+  if (route === "wallpapers") {
+    setWallpaper(wallpapers[wallpaperIndex].id);
+    announce(`${wallpapers[wallpaperIndex].name} wallpaper applied.`);
+  } else if (route === "home") openApp(apps[selected].id);
   else if (route === "work") openProject(selectedProject);
   else if (route === "snake") game?.toggle();
   else screen.querySelector(".screen-action,.screen-row")?.click();
@@ -403,6 +525,7 @@ function numberKey(key) {
     fold(false);
     return;
   }
+  if (route === "startup") showHome();
   if (key !== "#") tone("key", key);
   const button = document.querySelector(`[data-key="${key}"]`);
   button?.classList.add("key-pressed");
@@ -430,6 +553,7 @@ function numberKey(key) {
   if (apps[index]) openApp(apps[index].id);
 }
 function showQuickView() {
+  if (route === "startup") showHome();
   phoneAudio.stop();
   quickReturnFocus = document.activeElement;
   game?.pause();
@@ -439,6 +563,26 @@ function showQuickView() {
 }
 
 document.addEventListener("click", async (event) => {
+  if (event.target.closest("[data-skip-startup]")) {
+    skipStartup();
+    return;
+  }
+  if (event.target.closest("[data-replay-startup]")) {
+    showStartup(true);
+    return;
+  }
+  if (event.target.closest("[data-open-wallpapers]")) {
+    tone("confirm");
+    openWallpapers();
+    return;
+  }
+  const wallpaperButton = event.target.closest("[data-wallpaper-option]");
+  if (wallpaperButton) {
+    tone("confirm");
+    setWallpaper(wallpaperButton.dataset.wallpaperOption);
+    announce(`${wallpapers[wallpaperIndex].name} wallpaper applied.`);
+    return;
+  }
   if (event.target.closest(".incoming-call a, .copy-contact"))
     phoneAudio.stop();
   if (event.target.closest("[data-preview-sound]")) {
@@ -579,6 +723,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 function pauseActivity() {
+  if (route === "startup") showHome();
   game?.pause();
   phoneAudio.stop();
 }
@@ -602,7 +747,9 @@ document.addEventListener("change", (event) => {
   } else if (event.target.id === "sound-volume") tone("key", "5");
 });
 setTheme(currentTheme());
-showHome();
+document.documentElement.dataset.wallpaper = wallpaper;
+if (readPreference("nj-phone-startup-seen") !== "1") showStartup();
+else showHome();
 clock();
 setInterval(clock, 30000);
 document.querySelector("#year").textContent = new Date().getFullYear();

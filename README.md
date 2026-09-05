@@ -33,11 +33,16 @@ The generated `dist/` directory is suitable for static hosting at a domain root.
 - Close/open the phone with the button below it. Closed controls become inert.
 - Snake uses the D-pad, arrow keys, or 2/4/6/8. OK, Space, or 5 starts/pauses it. Switching apps, closing the phone, opening Quick view, hiding the tab, or leaving the window pauses/stops the game.
 - Quick view provides a larger reading view of the portfolio, independent of the small phone screen.
+- Settings → Wallpaper offers Original, Munich, Alpine, and Midnight scenes. Tap to apply, or preview with the D-pad and press OK. The choice saves locally and is independent of the phone finish.
+- A 1.8-second signature startup appears on the first visit. Skip it with the on-screen button or use the phone controls immediately. Settings → Replay startup brings it back with a short melody. Reduced-motion preferences bypass the animation.
+- Snake shows SCORE and BEST, saves a new personal best during play, and retains it between rounds and visits on the same browser. Clearing site data clears the record and wallpaper choice.
 
 ## Files
 
 - `index.html`: phone hardware, surrounding layout, contact links, and Quick view content.
 - `src/audio.js`: original Web Audio synthesis, volume, sound styles, and playback cleanup. No downloaded audio assets.
+- `src/personalization.js`: wallpaper choices and resilient local preference / high-score storage.
+- `public/wallpapers/`: original SVG pixel scenes, with no external image requests.
 - `src/style.css`: the three color finishes, responsive layout, hardware illustration, folding, and app styles.
 - `src/main.js`: portfolio content, navigation, app screens, keyboard controls, audio feedback, themes, clock, and dialog behavior.
 - `src/snake.js`: standalone game rules and canvas renderer.

@@ -102,6 +102,11 @@ export function createPhoneAudio({
           note(pitch, time, 0.14, 0.12);
           note(pitch * 2, time, 0.09, 0.025);
         });
+      } else if (kind === "startup") {
+        [523.25, 659.25, 880].forEach((pitch, i) => {
+          note(pitch, now + i * 0.1, 0.2, 0.1);
+          note(pitch * 2, now + i * 0.1, 0.12, 0.018);
+        });
       } else if (kind === "confirm") {
         click(now, 0.018, 0.1);
         note(660, now, 0.065, 0.08);
