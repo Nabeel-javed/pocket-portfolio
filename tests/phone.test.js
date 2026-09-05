@@ -579,10 +579,7 @@ test("phone gallery buttons and directional keys browse projects with wraparound
   click('[data-key="2"]');
   click('[data-project="0"]');
   click('#screen-content [data-project-step="-1"]');
-  assert.match(
-    doc.querySelector(".project-mini").textContent,
-    /WORKFLOW STUDIO/,
-  );
+  assert.match(doc.querySelector(".project-mini").textContent, /SIM/);
   key("ArrowRight");
   assert.match(
     doc.querySelector(".project-mini").textContent,
@@ -637,10 +634,7 @@ test("larger gallery keeps captions, project details, and phone selection synchr
   assert.equal(doc.querySelector("#project-dialog").open, false);
   assert.equal(doc.body.style.overflow, "");
   assert.equal(doc.activeElement, doc.querySelector(".project-photo"));
-  assert.match(
-    doc.querySelector(".project-mini").textContent,
-    /WORKFLOW STUDIO/,
-  );
+  assert.match(doc.querySelector(".project-mini").textContent, /SIM/);
   click("#physical-back");
   assert.equal(
     doc.querySelector('.project-thumbnail[aria-current="true"]').dataset
@@ -661,7 +655,7 @@ test("physical OK opens the larger viewer and closing restores the hardware focu
   assert.equal(doc.activeElement, select);
 });
 
-test("planned projects retain attribution and concept status in both gallery views", () => {
+test("open-source projects retain creator attribution and current status in both gallery views", () => {
   const { doc, click } = setup();
   click('[data-key="2"]');
   assert.equal(
@@ -669,11 +663,11 @@ test("planned projects retain attribution and concept status in both gallery vie
     6,
   );
   for (const [index, project] of projects.entries()) {
-    if (project.status !== "planned") continue;
+    if (project.status !== "open-source") continue;
     click(`[data-project="${index}"]`);
     assert.match(
-      doc.querySelector(".project-plan").textContent,
-      /Not built yet/,
+      doc.querySelector(".project-context").textContent,
+      /Open-source project/,
     );
     assert.equal(
       doc.querySelector(".project-source a").href,
@@ -681,13 +675,13 @@ test("planned projects retain attribution and concept status in both gallery vie
     );
     assert.match(
       doc.querySelector(".project-photo-controls").textContent,
-      /Planned/,
+      /Open source/,
     );
     click(".project-photo");
     const viewer = doc.querySelector("#project-viewer-details");
     assert.match(
-      viewer.querySelector(".project-plan").textContent,
-      /Not built yet/,
+      viewer.querySelector(".project-context").textContent,
+      /Open-source project/,
     );
     assert.equal(
       viewer.querySelector(".project-source a").href,

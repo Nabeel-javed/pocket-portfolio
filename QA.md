@@ -38,6 +38,6 @@ No public deployment was performed.
 
 The five project visuals are original concept illustrations based on the existing descriptions. No actual project screenshots were available in the repository or supplied for this revision. Their SVG structure and preview delivery were checked; browser visual review remains pending under the limits above.
 
-## Planned project additions
+## Open-source project additions
 
-Six planned applications were added alongside the five existing projects. DOM checks cover planned status, upstream attribution and links, license notes in the larger viewer, and wraparound across all eleven entries. All eleven SVG files parse successfully and match their production build copies. The production build and all 45 tests pass. Browser visual review remains pending. No public deployment was performed for this addition.
+Six existing open-source projects are featured as community spotlights alongside the five existing portfolio projects. DOM checks cover open-source labels, creator attribution and links, license notes in the larger viewer, and wraparound across all eleven entries. All eleven SVG files parse successfully and match their production build copies. The production build and all 45 tests pass. Browser visual review remains pending. No public deployment was performed for this addition.

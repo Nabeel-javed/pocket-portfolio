@@ -315,7 +315,7 @@ function openApp(id) {
   } else if (id === "work") {
     setContent(
       appHeader(id, "Selected projects", `GALLERY / ${projects.length}`) +
-        `<div class="project-gallery" role="group" aria-label="Project albums">${projects.map((project, i) => `<button class="project-thumbnail ${i === selectedProject ? "selected" : ""}" data-project="${i}" aria-label="View ${project.title}" ${i === selectedProject ? 'aria-current="true"' : ""}><img src="${project.image}" alt="" width="720" height="440" loading="lazy"/><span class="project-thumbnail-title"><small>${String(i + 1).padStart(2, "0")}</small>${project.title}${project.status === "planned" ? '<span class="project-status">Planned</span>' : ""}</span></button>`).join("")}<div class="gallery-note"><span>${projects.length}</span>${projects.filter((project) => project.status !== "planned").length} SELECTED<br>${projects.filter((project) => project.status === "planned").length} PLANNED</div></div>`,
+        `<div class="project-gallery" role="group" aria-label="Project albums">${projects.map((project, i) => `<button class="project-thumbnail ${i === selectedProject ? "selected" : ""}" data-project="${i}" aria-label="View ${project.title}" ${i === selectedProject ? 'aria-current="true"' : ""}><img src="${project.image}" alt="" width="720" height="440" loading="lazy"/><span class="project-thumbnail-title"><small>${String(i + 1).padStart(2, "0")}</small>${project.title}${project.status === "open-source" ? '<span class="project-status">Open source</span>' : ""}</span></button>`).join("")}<div class="gallery-note"><span>${projects.length}</span>${projects.filter((project) => project.status !== "open-source").length} SELECTED<br>${projects.filter((project) => project.status === "open-source").length} OPEN SOURCE</div></div>`,
     );
     updateSoftkeys("Menu", "View", "Back");
     screen
@@ -411,13 +411,13 @@ function renderSettings() {
   );
 }
 function projectContext(project) {
-  return project.status === "planned"
-    ? '<div class="project-plan"><span class="project-status">Planned project</span><p>Concept stage · Not built yet.</p><p>Proposed features:</p></div>'
+  return project.status === "open-source"
+    ? '<div class="project-context"><span class="project-status">Open-source project</span><p>Community spotlight</p></div>'
     : "";
 }
 function projectSource(project) {
   return project.upstreamUrl
-    ? `<div class="project-source"><a href="${project.upstreamUrl}" target="_blank" rel="noopener noreferrer">Explore ${project.upstream} on GitHub <span aria-hidden="true">↗</span></a><p>Upstream: ${project.upstream} · ${project.license}</p></div>`
+    ? `<div class="project-source"><a href="${project.upstreamUrl}" target="_blank" rel="noopener noreferrer">Explore ${project.upstream} on GitHub <span aria-hidden="true">↗</span></a><p>Created by ${project.creator}. ${project.license}</p></div>`
     : "";
 }
 function openProject(index) {
