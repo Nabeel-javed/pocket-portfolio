@@ -54,6 +54,7 @@ Project text and image metadata live in `src/projects.js`. To add a supplied scr
 ## Files
 
 - `index.html`: phone hardware, surrounding layout, contact links, and Quick view content.
+- `src/telemetry.js`: production-only Vercel Web Analytics and Speed Insights initialization.
 - `src/audio.js`: original Web Audio synthesis, volume, sound styles, and playback cleanup. No downloaded audio assets.
 - `src/personalization.js`: wallpaper choices and resilient local preference / high-score storage.
 - `src/easter-egg.js`: bounded secret-code recognition with interruption and inactivity resets.
@@ -67,7 +68,7 @@ Project text and image metadata live in `src/projects.js`. To add a supplied scr
 - `tests/snake.test.js`: game rule regression tests.
 - `public/Nabeel-Javed-CV.pdf`: public CV with the phone number removed by actual PDF redaction.
 
-Fonts are self-hosted; their SIL Open Font Licenses are in `public/licenses/`. There is no analytics or remote font service. Contact buttons use mailto links rather than a server-side form.
+Fonts are self-hosted; their SIL Open Font Licenses are in `public/licenses/`. Vercel Web Analytics collects page views and Speed Insights collects performance metrics in production builds. Local development does not load either integration. There is no remote font service. Contact buttons use mailto links rather than a server-side form.
 
 The original supplied CV is preserved outside this project. The previous exploded-object implementation is backed up at `../nabeel-portfolio-history/exploded-object-2026-09-05.tar.gz`.
 

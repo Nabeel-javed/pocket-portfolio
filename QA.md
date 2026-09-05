@@ -41,3 +41,7 @@ The five project visuals are original concept illustrations based on the existin
 ## Open-source project additions
 
 Six existing open-source projects are featured as community spotlights alongside the five existing portfolio projects. DOM checks cover open-source labels, creator attribution and links, license notes in the larger viewer, and wraparound across all eleven entries. All eleven SVG files parse successfully and match their production build copies. The production build and all 45 tests pass. Browser visual review remains pending. These additions are included in the Vercel production deployment.
+
+## Analytics and performance monitoring
+
+Vercel Web Analytics and Speed Insights are initialized by `src/telemetry.js` in production builds. The 45 existing tests and production build pass. An isolated DOM smoke check of the compiled telemetry entry confirms that both deferred Vercel scripts are injected. This verifies integration wiring; dashboard ingestion requires actual browser traffic and is not established by the DOM check.

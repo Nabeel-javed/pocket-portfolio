@@ -1,4 +1,5 @@
 import "./style.css";
+import "./telemetry.js";
 import { createSnake } from "./snake.js";
 import { createPhoneAudio } from "./audio.js";
 import { createPersonalization, wallpapers } from "./personalization.js";
