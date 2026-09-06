@@ -53,3 +53,9 @@ Vercel Web Analytics and Speed Insights are initialized by `src/telemetry.js` in
 - Real browser interactions passed: opening Projects, gallery details and modal, Escape, rotation presets, keyboard orbit/reset without app navigation, mouse drag and release, folding, Snake, and returning home.
 - Mobile emulation passed: reduced-motion default, Contact, view presets, touch drag and release, and no horizontal overflow.
 - All 48 regression tests and the production build pass. No JavaScript page errors during the desktop browser interaction check.
+
+## Paper Archive — 2026-09-06
+
+The selected local concept is now the production layout, with static editorial content, a numbered index, a cream default shell, and a gentle 12-degree starting view. The preview switcher and the other three concepts are excluded from this checkout. Phone finishes remain independently selectable on the paper background.
+
+All 48 regression tests and the production build pass. Headless Chrome checks passed for all four index links, reopening a folded phone through the index, direct screen clicks, finishes, project modal, Quick view, and 820/390/320px layouts without horizontal overflow. Desktop and mobile screenshots were visually reviewed. No JavaScript page errors were captured during those checks.

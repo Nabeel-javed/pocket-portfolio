@@ -1,6 +1,6 @@
 # Nabeel Javed — Pocket Portfolio
 
-A personal portfolio inside an interactive 3D retro flip phone. The phone is built with CSS, SVG, and JavaScript; it does not require WebGL, a model download, a backend, or API credentials.
+A personal portfolio with the Paper Archive layout: warm paper, serif typography, a numbered index, and an interactive 3D retro flip phone. The phone is built with CSS, SVG, and JavaScript; it does not require WebGL, a model download, a backend, or API credentials.
 
 ## Run
 
@@ -22,6 +22,9 @@ npm test
 The generated `dist/` directory is suitable for static hosting at a domain root. Local servers bind to `127.0.0.1`. Production: https://pocket-portfolio-sigma.vercel.app. Vercel is connected to `Nabeel-javed/pocket-portfolio`; pushes to `main` deploy automatically.
 
 ## Phone controls
+
+- The desktop archive index opens Projects, About, Snake, and Contact directly, including when the phone is closed.
+- The paper layout stays warm and light while the phone finish can be changed independently.
 
 - Drag the rotation strip with a mouse or touch to inspect the solid phone body. Front, 3D view, and Back provide fixed viewpoints.
 - Focus the rotation strip and use arrow keys to turn the phone; Enter, Space, or Home returns to Front. These keys do not navigate the phone while the strip is focused.
@@ -58,6 +61,7 @@ Project text and image metadata live in `src/projects.js`. To add a supplied scr
 ## Files
 
 - `index.html`: phone hardware, surrounding layout, contact links, and Quick view content.
+- `src/archive.css`: the selected Paper Archive layout and responsive typography.
 - `src/phone-3d.js`: rounded shell depth, orbit presets, pointer/touch rotation, and reduced-motion handling.
 - `src/telemetry.js`: production-only Vercel Web Analytics and Speed Insights initialization.
 - `src/audio.js`: original Web Audio synthesis, volume, sound styles, and playback cleanup. No downloaded audio assets.

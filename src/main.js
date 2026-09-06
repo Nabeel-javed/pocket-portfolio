@@ -1,4 +1,5 @@
 import "./style.css";
+import "./archive.css";
 import "./telemetry.js";
 import { createPhone3D } from "./phone-3d.js";
 import { createSnake } from "./snake.js";
@@ -149,12 +150,7 @@ function setTheme(theme) {
         String(button.dataset.themeOption === theme),
       ),
     );
-  document.querySelector('meta[name="theme-color"]').content = {
-    porcelain: "#efeee8",
-    graphite: "#202624",
-    amber: "#e9e2d6",
-    aurora: "#211f36",
-  }[theme];
+  document.querySelector('meta[name="theme-color"]').content = "#f4f0e7";
 }
 function cycleTheme() {
   const themes = themeOptions();
@@ -692,6 +688,14 @@ document.addEventListener("click", async (event) => {
   if (app) {
     tone("confirm");
     openApp(app.dataset.app);
+    if (app.closest(".archive-index")) {
+      phoneScreen.scrollIntoView({
+        block: "center",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
+    }
     return;
   }
   const project = event.target.closest("[data-project]");

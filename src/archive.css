@@ -1,0 +1,243 @@
+/* Paper Archive: the selected editorial layout. Phone finishes stay independent. */
+:root[data-design="paper"] {
+  --desk: #f4f0e7;
+  --ink: #322e29;
+  --muted: #817565;
+  --accent: #ba4e32;
+  --rule: #d7cfc0;
+  --paper: #e7dfcf;
+  --paper-ink: #5a4d3b;
+  --phone-scale: 0.73;
+  color-scheme: light;
+}
+:root[data-design="paper"][data-theme="porcelain"] {
+  --shell-light: #eeeae1;
+  --shell-mid: #cbc4b8;
+  --shell-dark: #9d978b;
+  --shell-edge: #726c63;
+}
+[data-design="paper"] body {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 5px,
+      #53422603 5px,
+      #53422603 6px
+    ),
+    var(--desk);
+}
+[data-design="paper"] .site-header {
+  height: 92px;
+  width: calc(100% - 96px);
+  border-bottom: 2px solid var(--ink);
+}
+[data-design="paper"] .desktop {
+  max-width: 1300px;
+  width: calc(100% - 112px);
+  min-height: 740px;
+  border-left: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+  padding: 35px 35px 25px;
+  grid-template-columns: 1fr 1fr 0.7fr;
+  gap: 40px;
+}
+[data-design="paper"] .intro-note {
+  display: block;
+  align-self: center;
+}
+[data-design="paper"] .intro-note h1 {
+  font:
+    94px/0.92 Georgia,
+    serif;
+  letter-spacing: -7px;
+  margin: 28px 0;
+}
+[data-design="paper"] .intro-note h1 em {
+  font-weight: 400;
+  color: var(--accent);
+  font-style: italic;
+}
+[data-design="paper"] .intro-role {
+  font:
+    20px/1.7 Georgia,
+    serif;
+}
+[data-design="paper"] .location-note {
+  font-size: 10px;
+  max-width: 230px;
+  line-height: 1.8;
+}
+[data-design="paper"] .serial-note {
+  margin-top: 45px;
+  letter-spacing: 0;
+  font-size: 9px;
+}
+[data-design="paper"] .phone-wrap {
+  margin: 10px 0 0;
+}
+[data-design="paper"] .phone-scene {
+  padding: 0;
+}
+[data-design="paper"] .field-notes {
+  padding: 0;
+  align-self: center;
+}
+.archive-label {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  font: 6px var(--mono);
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 9px 10px;
+  transform: rotate(-3deg);
+}
+[data-design="paper"] .orbit-controls {
+  width: 225px;
+  margin-top: 22px;
+}
+[data-design="paper"] .phone-caption {
+  margin-top: 15px;
+}
+[data-design="paper"] .easter-clue {
+  margin-top: 16px;
+}
+[data-design="paper"] .site-footer {
+  width: calc(100% - 96px);
+  min-height: 76px;
+}
+[data-design="paper"] #orbit-pad {
+  border-style: dashed;
+  background: transparent;
+}
+.archive-index > p {
+  font: 7px/1.9 var(--mono);
+  letter-spacing: 1px;
+  max-width: 160px;
+  margin-bottom: 30px;
+  color: var(--muted);
+}
+.archive-index button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  padding: 22px 0;
+  color: var(--ink);
+  font:
+    16px Georgia,
+    serif;
+  text-align: left;
+}
+.archive-index button:hover {
+  color: var(--accent);
+}
+.archive-index button span {
+  font: 7px var(--mono);
+  color: var(--muted);
+}
+.archive-index button b {
+  margin-left: auto;
+  font-weight: 400;
+}
+.archive-index .index-foot {
+  font: 6px/2 var(--mono);
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-top: 30px;
+}
+/* The projected faces, not the untransformed container, receive pointer input. */
+[data-design="paper"] .phone,
+[data-design="paper"] .phone-orbit {
+  pointer-events: none;
+}
+[data-design="paper"] .lid-front,
+[data-design="paper"] .phone-base {
+  pointer-events: auto;
+}
+[data-design="paper"] .phone.is-closed .lid-front,
+[data-design="paper"] .phone.is-closed .phone-base {
+  pointer-events: none;
+}
+@media (min-width: 1500px) {
+  :root[data-design="paper"] {
+    --phone-scale: 0.84;
+  }
+  [data-design="paper"] .desktop {
+    min-height: 810px;
+  }
+}
+@media (max-width: 1050px) {
+  [data-design="paper"] .desktop {
+    width: calc(100% - 64px);
+    gap: 30px;
+    grid-template-columns: 1fr 1fr;
+  }
+  [data-design="paper"] .field-notes {
+    display: none;
+  }
+  [data-design="paper"] .intro-note h1 {
+    font-size: 64px;
+  }
+}
+@media (max-width: 760px) {
+  :root[data-design="paper"] {
+    --phone-scale: 0.78;
+  }
+  [data-design="paper"] .site-header {
+    width: calc(100% - 36px);
+    height: 72px;
+  }
+  [data-design="paper"] .desktop {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 28px;
+    width: 100%;
+    padding: 28px 20px;
+    border: none;
+  }
+  [data-design="paper"] .intro-note {
+    position: static;
+    width: 100%;
+    text-align: center;
+  }
+  [data-design="paper"] .intro-note .tiny-label {
+    justify-content: center;
+    font-size: 6px;
+    max-width: none;
+  }
+  [data-design="paper"] .intro-note h1 {
+    font-size: 65px;
+    margin: 15px 0;
+    letter-spacing: -2px;
+  }
+  [data-design="paper"] .intro-role {
+    font-size: 13px;
+    margin: 0;
+  }
+  [data-design="paper"] .intro-rule,
+  [data-design="paper"] .location-note,
+  [data-design="paper"] .serial-note,
+  [data-design="paper"] .outside-cv {
+    display: none;
+  }
+  [data-design="paper"] .phone-scene {
+    width: 100%;
+    max-width: 340px;
+  }
+  [data-design="paper"] .site-footer {
+    width: calc(100% - 36px);
+  }
+  [data-design="paper"] .orbit-presets button {
+    min-height: 36px;
+  }
+}

@@ -7,8 +7,8 @@ export function createPhone3D({ document, window }) {
   const readout = document.querySelector("#orbit-readout");
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-  let yaw = motion.matches ? 0 : -18;
-  let pitch = motion.matches ? 0 : -9;
+  let yaw = motion.matches ? 0 : 12;
+  let pitch = 0;
   let drag = null;
   let frame = 0;
   let hoverX = 0;
@@ -49,7 +49,7 @@ export function createPhone3D({ document, window }) {
     });
     paint();
   }
-  const presets = { front: [0, 0], angle: [-9, -24], back: [0, 180] };
+  const presets = { front: [0, 0], angle: [0, 12], back: [0, 180] };
   scene.querySelectorAll("[data-phone-pose]").forEach((button) => {
     button.addEventListener("click", () => {
       const name = button.dataset.phonePose;
@@ -125,7 +125,7 @@ export function createPhone3D({ document, window }) {
     if (event.target.matches(":focus-visible")) setPose(0, 0, "front");
   });
   document.querySelector("#fold-phone").addEventListener("click", () => {
-    if (Math.abs(yaw) > 80) setPose(-9, -24, "angle");
+    if (Math.abs(yaw) > 80) setPose(0, 12, "angle");
   });
   motion.addEventListener?.("change", () => {
     if (motion.matches) setPose(0, 0, "front");
