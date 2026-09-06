@@ -1,11 +1,11 @@
 # Flip-phone validation
 
-2026-09-05. This record supersedes the exploded-object design's QA record.
+Updated 2026-09-06. This record supersedes the exploded-object design's QA record.
 
 ## Passed
 
 - Production build (`npm run build`).
-- 45 regression checks (`npm test`): thirty phone interaction, gallery, and personalization checks, two secret-code checks, six audio lifecycle checks, and seven Snake rule checks.
+- 48 regression checks (`npm test`): thirty-three phone interaction, gallery, and personalization checks, two secret-code checks, six audio lifecycle checks, and seven Snake rule checks.
 - All nine apps can be opened and returned from.
 - Keyboard selection works after a physical keypad button had focus.
 - All eleven project details open and lead to Contact; Back restores the project list.
@@ -28,7 +28,7 @@
 
 ## Limits
 
-The DOM harness mocks browser drawing and modal methods, and the audio tests use a mock Web Audio context. These checks do not establish visual layout, audible sound quality, native focus trapping, or real-device behavior. During this revision, the in-app browser connector failed to load a dependency; native Chrome showed a blank viewport on reload despite the preview serving the HTML and JavaScript successfully. Desktop/mobile visual review and listening on real speakers remain pending; no cross-browser certification is claimed.
+The DOM harness mocks browser drawing and modal methods, and the audio tests use a mock Web Audio context. The 3D revision was also visually reviewed and exercised in headless Chrome at desktop and mobile viewport sizes, including touch emulation. This does not establish Safari/Firefox compatibility, physical-device performance, or audible sound quality on real speakers. The in-app browser connector remains unavailable, so standalone Playwright with installed Chrome was used for this review.
 
 The public CV was previously visually reviewed after redaction. This revision preserves that file. Its original source is stored outside the project.
 
@@ -45,3 +45,11 @@ Six existing open-source projects are featured as community spotlights alongside
 ## Analytics and performance monitoring
 
 Vercel Web Analytics and Speed Insights are initialized by `src/telemetry.js` in production builds. The 45 existing tests and production build pass. An isolated DOM smoke check of the compiled telemetry entry confirms that both deferred Vercel scripts are injected. This verifies integration wiring; dashboard ingestion requires actual browser traffic and is not established by the DOM check.
+
+## 3D phone — 2026-09-06
+
+- Solid shell depth built from rounded CSS cross-sections, separate rear panels, perspective, and a folding hinge. The screen remains live HTML with existing controls.
+- Desktop screenshots reviewed in default, rear, side, and folded poses. Mobile screenshot reviewed at 390px width with no horizontal overflow.
+- Real browser interactions passed: opening Projects, gallery details and modal, Escape, rotation presets, keyboard orbit/reset without app navigation, mouse drag and release, folding, Snake, and returning home.
+- Mobile emulation passed: reduced-motion default, Contact, view presets, touch drag and release, and no horizontal overflow.
+- All 48 regression tests and the production build pass. No JavaScript page errors during the desktop browser interaction check.

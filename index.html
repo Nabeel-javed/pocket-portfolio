@@ -104,162 +104,198 @@
         <div class="phone-wrap">
           <div class="phone" id="phone">
             <div class="phone-shadow" aria-hidden="true"></div>
-            <div class="lid" id="phone-lid">
-              <div class="lid-front">
-                <div class="speaker" aria-hidden="true">
-                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                </div>
-                <div class="screen-frame">
-                  <div
-                    class="phone-screen"
-                    id="phone-screen"
-                    tabindex="-1"
-                    aria-label="Phone screen"
-                  >
-                    <div class="status-bar">
-                      <span class="signal" aria-label="Signal strength"
-                        ><i></i><i></i><i></i><i></i></span
-                      ><span class="network-name">nabeel.</span
-                      ><span id="sound-indicator" aria-hidden="true">♪</span
-                      ><time class="status-time">14:00</time
-                      ><span class="battery" aria-label="Battery full"
-                        ><i></i><i></i><i></i
-                      ></span>
-                    </div>
-                    <div id="screen-content" class="screen-content"></div>
-                    <div class="screen-softkeys">
-                      <button id="screen-left">Menu</button
-                      ><span id="screen-center">Select</span
-                      ><button id="screen-right">Back</button>
+            <div class="phone-orbit" id="phone-orbit">
+              <div class="lid" id="phone-lid">
+                <div
+                  class="lid-shell"
+                  data-shell-depth
+                  aria-hidden="true"
+                ></div>
+                <div class="lid-front">
+                  <div class="speaker" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                  </div>
+                  <div class="screen-frame">
+                    <div
+                      class="phone-screen"
+                      id="phone-screen"
+                      tabindex="-1"
+                      aria-label="Phone screen"
+                    >
+                      <div class="status-bar">
+                        <span class="signal" aria-label="Signal strength"
+                          ><i></i><i></i><i></i><i></i></span
+                        ><span class="network-name">nabeel.</span
+                        ><span id="sound-indicator" aria-hidden="true">♪</span
+                        ><time class="status-time">14:00</time
+                        ><span class="battery" aria-label="Battery full"
+                          ><i></i><i></i><i></i
+                        ></span>
+                      </div>
+                      <div id="screen-content" class="screen-content"></div>
+                      <div class="screen-softkeys">
+                        <button id="screen-left">Menu</button
+                        ><span id="screen-center">Select</span
+                        ><button id="screen-right">Back</button>
+                      </div>
                     </div>
                   </div>
+                  <div class="lid-brand" aria-hidden="true">
+                    <span>N J</span><span>POCKET EDITION</span>
+                  </div>
                 </div>
-                <div class="lid-brand" aria-hidden="true">
-                  <span>N J</span><span>POCKET EDITION</span>
+                <div class="lid-back" aria-hidden="true">
+                  <span class="back-brand">n<span>j</span>.</span>
+                  <div class="outer-screen">
+                    <span>nabeel.</span><time class="outer-time">14:00</time
+                    ><small>GOOD THINGS INSIDE.</small>
+                  </div>
+                  <div class="camera-dot"></div>
+                  <span class="back-caption">DESIGNED TO CONNECT.</span>
                 </div>
               </div>
-              <div class="lid-back" aria-hidden="true">
-                <span class="back-brand">n<span>j</span>.</span>
-                <div class="outer-screen">
-                  <span>nabeel.</span><time class="outer-time">14:00</time
-                  ><small>GOOD THINGS INSIDE.</small>
-                </div>
-                <div class="camera-dot"></div>
-                <span class="back-caption">DESIGNED TO CONNECT.</span>
+              <div class="hinge" aria-hidden="true">
+                <span></span><i></i><b>NJ—01</b><i></i><span></span>
               </div>
-            </div>
-            <div class="hinge" aria-hidden="true">
-              <span></span><i></i><b>NJ—01</b><i></i><span></span>
-            </div>
-            <div class="phone-base">
-              <span class="side-button side-left" aria-hidden="true"></span
-              ><span class="side-button side-right" aria-hidden="true"></span>
-              <div class="navigation-deck">
-                <div class="soft-column">
-                  <button
-                    id="physical-menu"
-                    class="soft-button"
-                    aria-label="Open app menu"
-                  >
-                    <span aria-hidden="true">—</span></button
-                  ><button
-                    id="call-key"
-                    class="call-key"
-                    aria-label="Open contact app"
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path
-                        d="M5 4c-2 1-2 5 2 9s8 6 10 4l2-3-4-3-2 2-4-4 2-2-3-4z"
-                      />
-                    </svg>
+              <div class="base-shell" data-shell-depth aria-hidden="true"></div>
+              <div class="base-back" aria-hidden="true">
+                <span class="rear-monogram">nj.</span
+                ><span class="rear-divider"></span><span>POCKET EDITION</span
+                ><small>DESIGNED IN CURIOSITY<br />ASSEMBLED WITH IDEAS</small
+                ><span class="rear-grille">||||||||||||</span
+                ><small>NJ—01 / MUNICH</small>
+              </div>
+              <div class="phone-base">
+                <span class="side-button side-left" aria-hidden="true"></span
+                ><span class="side-button side-right" aria-hidden="true"></span>
+                <div class="navigation-deck">
+                  <div class="soft-column">
+                    <button
+                      id="physical-menu"
+                      class="soft-button"
+                      aria-label="Open app menu"
+                    >
+                      <span aria-hidden="true">—</span></button
+                    ><button
+                      id="call-key"
+                      class="call-key"
+                      aria-label="Open contact app"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M5 4c-2 1-2 5 2 9s8 6 10 4l2-3-4-3-2 2-4-4 2-2-3-4z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="dpad" aria-label="Directional controls">
+                    <button
+                      data-direction="up"
+                      class="dpad-up"
+                      aria-label="Move up"
+                    >
+                      ▴</button
+                    ><button
+                      data-direction="left"
+                      class="dpad-left"
+                      aria-label="Move left"
+                    >
+                      ◂</button
+                    ><button
+                      class="dpad-center"
+                      id="select-key"
+                      aria-label="Select app or item"
+                    >
+                      OK</button
+                    ><button
+                      data-direction="right"
+                      class="dpad-right"
+                      aria-label="Move right"
+                    >
+                      ▸</button
+                    ><button
+                      data-direction="down"
+                      class="dpad-down"
+                      aria-label="Move down"
+                    >
+                      ▾
+                    </button>
+                  </div>
+                  <div class="soft-column">
+                    <button
+                      id="physical-back"
+                      class="soft-button"
+                      aria-label="Go back"
+                    >
+                      <span aria-hidden="true">—</span></button
+                    ><button
+                      id="end-key"
+                      class="end-key"
+                      aria-label="Return to home screen"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 13c3-6 15-6 18 0l-1 4-5-1v-3H9v3l-5 1z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="keypad" aria-label="Phone keypad">
+                  <button data-key="1" aria-label="1 — About">
+                    <b>1</b><small>◦ ◦</small></button
+                  ><button data-key="2" aria-label="2 — Projects">
+                    <b>2</b><small>abc</small></button
+                  ><button data-key="3" aria-label="3 — Experience">
+                    <b>3</b><small>def</small>
+                  </button>
+                  <button data-key="4" aria-label="4 — Skills">
+                    <b>4</b><small>ghi</small></button
+                  ><button data-key="5" aria-label="5 — Contact">
+                    <b>5</b><small>jkl</small></button
+                  ><button data-key="6" aria-label="6 — Links">
+                    <b>6</b><small>mno</small>
+                  </button>
+                  <button data-key="7" aria-label="7 — CV">
+                    <b>7</b><small>pqrs</small></button
+                  ><button data-key="8" aria-label="8 — Snake">
+                    <b>8</b><small>tuv</small></button
+                  ><button data-key="9" aria-label="9 — Settings">
+                    <b>9</b><small>wxyz</small>
+                  </button>
+                  <button data-key="*" aria-label="Change phone color">
+                    <b>✳</b><small>color</small></button
+                  ><button data-key="0" aria-label="0 — Home">
+                    <b>0</b><small>home</small></button
+                  ><button data-key="#" aria-label="Toggle phone sounds">
+                    <b>#</b><small>sound</small>
                   </button>
                 </div>
-                <div class="dpad" aria-label="Directional controls">
-                  <button
-                    data-direction="up"
-                    class="dpad-up"
-                    aria-label="Move up"
-                  >
-                    ▴</button
-                  ><button
-                    data-direction="left"
-                    class="dpad-left"
-                    aria-label="Move left"
-                  >
-                    ◂</button
-                  ><button
-                    class="dpad-center"
-                    id="select-key"
-                    aria-label="Select app or item"
-                  >
-                    OK</button
-                  ><button
-                    data-direction="right"
-                    class="dpad-right"
-                    aria-label="Move right"
-                  >
-                    ▸</button
-                  ><button
-                    data-direction="down"
-                    class="dpad-down"
-                    aria-label="Move down"
-                  >
-                    ▾
-                  </button>
+                <div class="base-footer" aria-hidden="true">
+                  <span class="mic-hole"></span><span>MADE OF IDEAS.</span
+                  ><span class="mic-hole"></span>
                 </div>
-                <div class="soft-column">
-                  <button
-                    id="physical-back"
-                    class="soft-button"
-                    aria-label="Go back"
-                  >
-                    <span aria-hidden="true">—</span></button
-                  ><button
-                    id="end-key"
-                    class="end-key"
-                    aria-label="Return to home screen"
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M3 13c3-6 15-6 18 0l-1 4-5-1v-3H9v3l-5 1z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="keypad" aria-label="Phone keypad">
-                <button data-key="1" aria-label="1 — About">
-                  <b>1</b><small>◦ ◦</small></button
-                ><button data-key="2" aria-label="2 — Projects">
-                  <b>2</b><small>abc</small></button
-                ><button data-key="3" aria-label="3 — Experience">
-                  <b>3</b><small>def</small>
-                </button>
-                <button data-key="4" aria-label="4 — Skills">
-                  <b>4</b><small>ghi</small></button
-                ><button data-key="5" aria-label="5 — Contact">
-                  <b>5</b><small>jkl</small></button
-                ><button data-key="6" aria-label="6 — Links">
-                  <b>6</b><small>mno</small>
-                </button>
-                <button data-key="7" aria-label="7 — CV">
-                  <b>7</b><small>pqrs</small></button
-                ><button data-key="8" aria-label="8 — Snake">
-                  <b>8</b><small>tuv</small></button
-                ><button data-key="9" aria-label="9 — Settings">
-                  <b>9</b><small>wxyz</small>
-                </button>
-                <button data-key="*" aria-label="Change phone color">
-                  <b>✳</b><small>color</small></button
-                ><button data-key="0" aria-label="0 — Home">
-                  <b>0</b><small>home</small></button
-                ><button data-key="#" aria-label="Toggle phone sounds">
-                  <b>#</b><small>sound</small>
-                </button>
-              </div>
-              <div class="base-footer" aria-hidden="true">
-                <span class="mic-hole"></span><span>MADE OF IDEAS.</span
-                ><span class="mic-hole"></span>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="orbit-controls" aria-label="3D phone controls">
+          <div class="orbit-heading">
+            <span class="tiny-label">EXPLORE EVERY ANGLE</span
+            ><output id="orbit-readout" aria-label="Phone rotation"
+              >−18°</output
+            >
+          </div>
+          <button
+            id="orbit-pad"
+            aria-label="Rotate phone. Drag or use arrow keys; press Enter to reset."
+            title="Drag to rotate · Arrow keys to turn · Enter to reset"
+          >
+            <span aria-hidden="true">↔</span> Drag to rotate
+            <span class="orbit-ridges" aria-hidden="true">||||||||||||</span>
+          </button>
+          <div class="orbit-presets" role="group" aria-label="Phone view">
+            <button data-phone-pose="front" aria-pressed="false">Front</button
+            ><button data-phone-pose="angle" aria-pressed="true">3D view</button
+            ><button data-phone-pose="back" aria-pressed="false">Back</button>
           </div>
         </div>
         <div class="phone-caption">

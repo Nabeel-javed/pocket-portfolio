@@ -6,6 +6,7 @@ import { createSnake } from "../src/snake.js";
 import { createPhoneAudio } from "../src/audio.js";
 import { createPersonalization, wallpapers } from "../src/personalization.js";
 import { createSecretCode } from "../src/easter-egg.js";
+import { createPhone3D } from "../src/phone-3d.js";
 import { projects } from "../src/projects.js";
 
 const pages = [];
@@ -46,6 +47,7 @@ function setup({
   window.wallpapers = wallpapers;
   window.createSecretCode = createSecretCode;
   window.projects = projects;
+  window.createPhone3D = createPhone3D;
   window.HTMLElement.prototype.scrollBy = function ({ top }) {
     this.scrollTop += top;
   };
@@ -695,4 +697,59 @@ test("open-source projects retain creator attribution and current status in both
     click("#close-project");
     click("#physical-back");
   }
+});
+
+test("3D presets change the viewing angle without replacing the active phone app", () => {
+  const { doc, click } = setup({ reducedMotion: false });
+  click('[data-key="2"]');
+  click('[data-phone-pose="back"]');
+  assert.equal(
+    doc.querySelector("#phone-orbit").style.getPropertyValue("--orbit-y"),
+    "180deg",
+  );
+  assert.equal(
+    doc.querySelector('[data-phone-pose="back"]').getAttribute("aria-pressed"),
+    "true",
+  );
+  assert.equal(
+    doc.querySelectorAll(".project-thumbnail").length,
+    projects.length,
+  );
+  click('[data-phone-pose="front"]');
+  assert.equal(
+    doc.querySelector("#phone-orbit").style.getPropertyValue("--orbit-y"),
+    "0deg",
+  );
+  assert.equal(
+    doc.querySelector('[data-phone-pose="back"]').getAttribute("aria-pressed"),
+    "false",
+  );
+});
+
+test("rotation keyboard controls do not trigger phone navigation and can reset", () => {
+  const { doc, click, key } = setup();
+  click('[data-key="2"]');
+  doc.querySelector("#orbit-pad").focus();
+  for (let i = 0; i < 20; i++) key("ArrowRight");
+  assert.equal(doc.querySelector("#orbit-readout").textContent, "+180°");
+  assert.equal(
+    doc.querySelector('.project-thumbnail[aria-current="true"]').dataset
+      .project,
+    "0",
+  );
+  key("Enter");
+  assert.equal(doc.querySelector("#orbit-readout").textContent, "0°");
+  assert.equal(doc.querySelector("#project-dialog").open, false);
+});
+
+test("reduced motion starts straight on, and folding a rear view presents the cover", () => {
+  const { doc, click } = setup();
+  assert.equal(doc.querySelector(".phone-scene").dataset.pose, "front");
+  click('[data-phone-pose="back"]');
+  click("#fold-phone");
+  assert.equal(doc.querySelector(".phone-scene").dataset.pose, "angle");
+  assert.ok(doc.querySelector("#phone").classList.contains("is-closed"));
+  assert.equal(doc.querySelector(".phone-base").inert, true);
+  click("#fold-phone");
+  assert.equal(doc.querySelector(".phone-base").inert, false);
 });

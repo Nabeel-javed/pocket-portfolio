@@ -1,6 +1,6 @@
 # Nabeel Javed — Pocket Portfolio
 
-A personal portfolio inside an interactive retro flip phone. The phone is built with CSS, SVG, and JavaScript; it does not require WebGL, a model download, a backend, or API credentials.
+A personal portfolio inside an interactive 3D retro flip phone. The phone is built with CSS, SVG, and JavaScript; it does not require WebGL, a model download, a backend, or API credentials.
 
 ## Run
 
@@ -22,6 +22,10 @@ npm test
 The generated `dist/` directory is suitable for static hosting at a domain root. Local servers bind to `127.0.0.1`. Production: https://pocket-portfolio-sigma.vercel.app. Vercel is connected to `Nabeel-javed/pocket-portfolio`; pushes to `main` deploy automatically.
 
 ## Phone controls
+
+- Drag the rotation strip with a mouse or touch to inspect the solid phone body. Front, 3D view, and Back provide fixed viewpoints.
+- Focus the rotation strip and use arrow keys to turn the phone; Enter, Space, or Home returns to Front. These keys do not navigate the phone while the strip is focused.
+- A subtle pointer tilt follows the cursor in 3D view. Reduced-motion users start in Front with no automatic tilt or animated transitions. Keyboard focus inside the phone also restores Front for reading.
 
 - Tap an app, or press 1–9 to open About, Projects, Experience, Skills, Contact, Links, CV, Snake, or Settings.
 - Use the D-pad or arrow keys to select apps and projects. Press OK or Enter to open them.
@@ -54,6 +58,7 @@ Project text and image metadata live in `src/projects.js`. To add a supplied scr
 ## Files
 
 - `index.html`: phone hardware, surrounding layout, contact links, and Quick view content.
+- `src/phone-3d.js`: rounded shell depth, orbit presets, pointer/touch rotation, and reduced-motion handling.
 - `src/telemetry.js`: production-only Vercel Web Analytics and Speed Insights initialization.
 - `src/audio.js`: original Web Audio synthesis, volume, sound styles, and playback cleanup. No downloaded audio assets.
 - `src/personalization.js`: wallpaper choices and resilient local preference / high-score storage.

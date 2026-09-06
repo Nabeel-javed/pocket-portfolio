@@ -1,5 +1,6 @@
 import "./style.css";
 import "./telemetry.js";
+import { createPhone3D } from "./phone-3d.js";
 import { createSnake } from "./snake.js";
 import { createPhoneAudio } from "./audio.js";
 import { createPersonalization, wallpapers } from "./personalization.js";
@@ -889,3 +890,5 @@ else showHome();
 clock();
 setInterval(clock, 30000);
 document.querySelector("#year").textContent = new Date().getFullYear();
+
+createPhone3D({ document, window });
