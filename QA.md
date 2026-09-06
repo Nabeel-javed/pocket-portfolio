@@ -59,3 +59,9 @@ Vercel Web Analytics and Speed Insights are initialized by `src/telemetry.js` in
 The selected local concept is now the production layout, with static editorial content, a numbered index, a cream default shell, and a gentle 12-degree starting view. The preview switcher and the other three concepts are excluded from this checkout. Phone finishes remain independently selectable on the paper background.
 
 All 48 regression tests and the production build pass. Headless Chrome checks passed for all four index links, reopening a folded phone through the index, direct screen clicks, finishes, project modal, Quick view, and 820/390/320px layouts without horizontal overflow. Desktop and mobile screenshots were visually reviewed. No JavaScript page errors were captured during those checks.
+
+## Viewport-aware phone size — 2026-09-06
+
+Raised the desktop scale ceiling from 0.73 to 0.94 (previously 0.84 on wide screens) and the mobile ceiling from 0.78 to 0.90. The model now fits the available viewport height and column width on load, font readiness, and resize. Mobile headings use less vertical space. Short windows reduce the scale as needed; secondary controls and page content can still require scrolling.
+
+Headless Chrome measured the full default phone within the viewport, without horizontal overflow, at 1440×1000, 1440×900, 1366×768, 1920×1080, 820×844, 390×844, 375×667, 320×568, and 844×390. Desktop and mobile screenshots were reviewed. All 48 regression tests, the interaction smoke check, formatting, and production build passed.

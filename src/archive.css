@@ -7,7 +7,8 @@
   --rule: #d7cfc0;
   --paper: #e7dfcf;
   --paper-ink: #5a4d3b;
-  --phone-scale: 0.73;
+  --phone-scale: 0.94;
+  --phone-max-scale: 0.94;
   color-scheme: light;
 }
 :root[data-design="paper"][data-theme="porcelain"] {
@@ -35,10 +36,10 @@
 [data-design="paper"] .desktop {
   max-width: 1300px;
   width: calc(100% - 112px);
-  min-height: 740px;
+  min-height: calc(100svh - 168px);
   border-left: 1px solid var(--rule);
   border-right: 1px solid var(--rule);
-  padding: 35px 35px 25px;
+  padding: 24px 35px 25px;
   grid-template-columns: 1fr 1fr 0.7fr;
   gap: 40px;
 }
@@ -78,6 +79,7 @@
 }
 [data-design="paper"] .phone-scene {
   padding: 0;
+  align-self: start;
 }
 [data-design="paper"] .field-notes {
   padding: 0;
@@ -167,14 +169,6 @@
 [data-design="paper"] .phone.is-closed .phone-base {
   pointer-events: none;
 }
-@media (min-width: 1500px) {
-  :root[data-design="paper"] {
-    --phone-scale: 0.84;
-  }
-  [data-design="paper"] .desktop {
-    min-height: 810px;
-  }
-}
 @media (max-width: 1050px) {
   [data-design="paper"] .desktop {
     width: calc(100% - 64px);
@@ -190,7 +184,8 @@
 }
 @media (max-width: 760px) {
   :root[data-design="paper"] {
-    --phone-scale: 0.78;
+    --phone-scale: 0.9;
+    --phone-max-scale: 0.9;
   }
   [data-design="paper"] .site-header {
     width: calc(100% - 36px);
@@ -200,15 +195,16 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
-    gap: 28px;
+    gap: 18px;
     width: 100%;
-    padding: 28px 20px;
+    padding: 16px 20px 28px;
     border: none;
   }
   [data-design="paper"] .intro-note {
     position: static;
     width: 100%;
     text-align: center;
+    padding-bottom: 0;
   }
   [data-design="paper"] .intro-note .tiny-label {
     justify-content: center;
@@ -216,13 +212,25 @@
     max-width: none;
   }
   [data-design="paper"] .intro-note h1 {
-    font-size: 65px;
-    margin: 15px 0;
+    font-size: 44px;
+    margin: 10px 0;
     letter-spacing: -2px;
   }
+  [data-design="paper"] .intro-note h1 br {
+    display: none;
+  }
+  [data-design="paper"] .intro-note h1 em::before {
+    content: " ";
+  }
   [data-design="paper"] .intro-role {
-    font-size: 13px;
+    font-size: 11px;
     margin: 0;
+  }
+  [data-design="paper"] .intro-role br {
+    display: none;
+  }
+  [data-design="paper"] .phone-scene::before {
+    display: none;
   }
   [data-design="paper"] .intro-rule,
   [data-design="paper"] .location-note,
@@ -233,6 +241,7 @@
   [data-design="paper"] .phone-scene {
     width: 100%;
     max-width: 340px;
+    align-self: center;
   }
   [data-design="paper"] .site-footer {
     width: calc(100% - 36px);

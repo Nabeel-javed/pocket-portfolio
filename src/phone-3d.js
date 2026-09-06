@@ -14,6 +14,26 @@ export function createPhone3D({ document, window }) {
   let hoverX = 0;
   let hoverY = 0;
 
+  // Fit the open model, including its projected edges, inside the initial viewport.
+  // Measure its document position so resizing after scrolling gives the same size.
+  const wrap = scene.querySelector(".phone-wrap");
+  function fitPhone() {
+    const root = document.documentElement;
+    const maximum = Number.parseFloat(
+      window.getComputedStyle(root).getPropertyValue("--phone-max-scale"),
+    );
+    if (!maximum) return;
+    const top = wrap.getBoundingClientRect().top + window.scrollY;
+    const height = window.innerHeight - top - 18;
+    const width = scene.clientWidth - 24;
+    if (height <= 0 || width <= 0) return;
+    const scale = Math.min(maximum, height / 700, width / 350);
+    root.style.setProperty("--phone-scale", String(scale));
+  }
+  window.addEventListener("resize", fitPhone);
+  fitPhone();
+  document.fonts?.ready.then(fitPhone);
+
   // Rounded cross-sections give the shell real depth from every viewing angle.
   for (const shell of document.querySelectorAll("[data-shell-depth]")) {
     for (let depth = 1; depth <= 22; depth++) {
